@@ -22,4 +22,5 @@
 ## 文件名 system_service_YYYYmmdd.txt
 > site_id|sub_users|unsub_users|total_users|call_times|show_times|mo_times|mt_times|record_time
 
+## 技术栈 计划使用 Flask + echarts 进行展示
 
