@@ -8,7 +8,7 @@
 > 告警信息收集 告警节点,告警时间,告警描述, 告警是否恢复 （对于未恢复节点的告警需要发送邮件)
 
 ## 采集文本格式定义
-> 文件名 system_info_YYYYmmdd.txt
+## 文件名 system_info_YYYYmmdd.txt
 > server_name|server_ip|site_id|type|record_time
 > server_name|server_ip|site_id|cpu|user_use|sys_use|io_use|idle|record_time
 > server_name|server_ip|site_id|mem|mem_use|mem_free|mem_buffer|mem_total|record_time
