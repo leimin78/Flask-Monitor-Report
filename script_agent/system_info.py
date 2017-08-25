@@ -4,7 +4,6 @@
 import time
 import subprocess
 
-
 #定义服务器名及服务器IP,局点
 server_name = 'SUSE-35'
 server_ip = '192.168.0.35'
@@ -61,25 +60,18 @@ class getSystemInfo():
     /dev/sda2             392G  108G  265G  29% /
     """
     def getDiskinfo(self):
-        cmd = subprocess.Popen("df -hl|sed -n '2,$p'",shell=True,stdout=subprocess.PIPE)
+        cmd = subprocess.Popen(""" df -hl|sed -n '2,$p'|awk -F' ' '{print $2","$3","$6}' """,shell=True,stdout=subprocess.PIPE)
         for line in cmd.stdout.readlines():
             record_time = time.strftime("%Y%m%d%M%S", time.localtime())
-            disk_lun = line.split(' ')[-1].strip('\n')
-            disk_uesd = line.split(' ')[-6]
-            disk_total = line.split(' ')[-8]
+            disk_lun = line.split(',')[-1].strip('\n')
+            disk_uesd = line.split(',')[-2]
+            disk_total = line.split(',')[-3]
             disk_line = server_name+'|'+server_ip+'|'+site_id+'|'+'disk'+'|'+disk_lun+'|'+disk_uesd+'|'+disk_total+'|'+record_time+'\n'
             with open(self.file_name,'a') as f:
                 f.write(disk_line)
-
-
-
 
 if __name__ == '__main__':
     sysinfo = getSystemInfo()
     sysinfo.getCpuInfo()
     sysinfo.getMeminfo()
     sysinfo.getDiskinfo()
-
-
-
-
