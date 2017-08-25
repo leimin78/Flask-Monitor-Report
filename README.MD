@@ -9,6 +9,7 @@
 
 ## 采集文本格式定义
 ## 文件名 system_info_YYYYmmdd.txt
+## 接口url: http://site_url/sys_monitor/system_info_YYYYmmdd.txt
 > server_name|server_ip|site_id|type|record_time
 > server_name|server_ip|site_id|cpu|user_use|sys_use|io_use|idle|record_time
 > server_name|server_ip|site_id|mem|mem_use|mem_free|mem_buffer|mem_total|record_time
@@ -17,9 +18,12 @@
 
 
 ## 文件名 system_alarm_YYYYmmdd.txt
+## 接口url http://site_url/sys_alarm/system_alarm_YYYYmmdd.txt
 > site_id|alarm_name|alarm_node|alarm_desc|alarm_time|alarm_resume_time|record_time
 
+
 ## 文件名 system_service_YYYYmmdd.txt
+## 接口url http://site_url/sys_service/system_service_YYYYmmdd.txt
 > site_id|sub_users|unsub_users|total_users|call_times|show_times|mo_times|mt_times|record_time
 
 ## 技术栈 计划使用 Flask + echarts 进行展示
