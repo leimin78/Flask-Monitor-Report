@@ -27,13 +27,13 @@ class getSystemInfo():
     """Cpu(s):  1.4%us,  0.4%sy,  0.0%ni, 97.9%id,  0.3%wa,  0.0%hi,  0.0%si,  0.0%st"""
     """server_name|server_ip|site_id|cpu|user_use|sys_use|io_use|idle|record_time"""
     def getCpuInfo(self):
-        cmd = subprocess.Popen("top -b -n1|grep Cpu",shell=True,stdout=subprocess.PIPE)
+        cmd = subprocess.Popen("""top -b -n1|grep Cpu |awk -F' ' '{print $2"|"$3"|"$5"|"$6}'""",shell=True,stdout=subprocess.PIPE)
         record_time = time.strftime("%Y%m%d%M%S",time.localtime())
         cpuinfo = cmd.stdout.readlines()[0]
-        user_use = cpuinfo.split(' ')[2].split('%')[0]
-        sys_use = cpuinfo.split(' ')[4].split('%')[0]
-        io_use = cpuinfo.split(' ')[9].split('%')[0]
-        idle = cpuinfo.split(' ')[7].split('%')[0]
+        user_use = cpuinfo.split('|')[0].split('%')[0]
+        sys_use = cpuinfo.split('|')[1].split('%')[0]
+        io_use = cpuinfo.split('|')[3].split('%')[0]
+        idle = cpuinfo.split('|')[2].split('%')[0]
         with open(self.file_name,'a') as f:
             line = server_name+'|'+server_ip+'|'+site_id+'|'+'cpu'+'|'+user_use+'|'+sys_use+'|'+io_use+'|'+idle+'|'+record_time+'\n'
             f.write(line)
@@ -42,13 +42,13 @@ class getSystemInfo():
     """Mem:   8064424k total,  7987120k used,    77304k free,    44084k buffers"""
     """server_name|server_ip|site_id|mem|mem_use|mem_free|mem_buffer|mem_total|record_time"""
     def getMeminfo(self):
-        cmd = subprocess.Popen("top -b -n1|grep Mem",shell=True,stdout=subprocess.PIPE)
+        cmd = subprocess.Popen("""top -b -n1|grep Mem|awk -F' ' '{print $2","$4","$6","$8}'""",shell=True,stdout=subprocess.PIPE)
         record_time = time.strftime("%Y%m%d%M%S",time.localtime())
         mem_info = cmd.stdout.readlines()[0]
-        mem_use = mem_info.split(' ')[6].split('k')[0]
-        mem_free = mem_info.split(' ')[11].split('k')[0]
-        mem_buffer = mem_info.split(' ')[16].split('k')[0]
-        mem_total = mem_info.split(' ')[3].split('k')[0]
+        mem_use = mem_info.split(',')[1].split('k')[0]
+        mem_free = mem_info.split(',')[2].split('k')[0]
+        mem_buffer = mem_info.split(',')[3].split('k')[0]
+        mem_total = mem_info.split(',')[0].split('k')[0]
         with open(self.file_name,'a') as f:
             line = server_name+'|'+server_ip+'|'+site_id+'|'+'mem'+'|'+mem_use+'|'+mem_free+'|'+mem_buffer+'|'+mem_total+'|'+record_time+'\n'
             f.write(line)
