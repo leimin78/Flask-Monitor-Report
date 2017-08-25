@@ -46,3 +46,8 @@ Flask-Monitor-Report/ </br>
 │   ├── system_info.py </br>
 │   └── system_info_20170824.txt </br>
 └── tests </br>
+
+
+### 定义局点表，用户表，服务器表，系统信息表的模型
+
+> 一个用户可以管理多个局点，一台服务器只能属于一个局点，一条记录属于一台服务器
