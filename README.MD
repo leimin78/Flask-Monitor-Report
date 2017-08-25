@@ -33,17 +33,16 @@
 
 ### 增加服务器信息采集脚本
 ### 规划目录结构
-`
-Flask-Monitor-Report/
-├── README.MD
-├── app
-│   ├── main
-│   ├── static
-│   └── templates
-├── config.py
-├── migrations
-├── script_agent
-│   ├── system_info.py
-│   └── system_info_20170824.txt
-└── tests
-`
+
+Flask-Monitor-Report/ </br>
+├── README.MD </br>
+├── app </br>
+│   ├── main </br>
+│   ├── static </br>
+│   └── templates </br>
+├── config.py </br>
+├── migrations </br>
+├── script_agent </br>
+│   ├── system_info.py </br>
+│   └── system_info_20170824.txt </br>
+└── tests </br>
