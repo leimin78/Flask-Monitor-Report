@@ -78,7 +78,8 @@ class SysInfo(db.Model):
     lun_use = db.Column(db.Float,nullable=True)
     lun_size = db.Column(db.Float,nullable=True)
 
-    host_id = db.Column(db.Integer,db.ForeignKey('server_info.id'))
+    record_time = db.Column(db.String(14))
+    host_ip = db.Column(db.String(30),db.ForeignKey('server_info.server_ip'))
 
 
 
