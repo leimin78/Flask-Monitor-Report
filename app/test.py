@@ -1,10 +1,12 @@
 import os
-from flask import Flask, render_template, redirect, url_for, session, flash
+import json
+from flask import Flask, render_template, redirect, url_for, session, flash,jsonify
 from flask_bootstrap import Bootstrap
 from flask_wtf import Form
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
+from get_server_info  import *
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -98,12 +100,21 @@ def index():
     return render_template('index.html', form=form, name=session.get('name'))
 
 
-@app.route('/sys_info')
+@app.route('/sys_info',methods=["POST","GET"])
 def sys_info():
-    with open('../script_agent/system_info_20170825.txt', 'r') as f:
-        content = f.readlines()
-    return render_template('system_info.html', content=content)
+    db = queryDB()
+    db.query_db(cpu_sql)
+    data = db.datas
+    return jsonify(
+    user_use = [x[0] for x in data],
+    sys_use = [x[1] for x in data],
+    io_use = [x[2] for x in data],
+    record_time = [x[-1].strip('\n') for x in data]
+    )
 
+@app.route('/cpuinfo')
+def cpu_info():
+    return render_template('cpu_info.html')
 
 @app.errorhandler(404)
 def page_not_found(e):

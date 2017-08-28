@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts3 Ajax</title>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='echarts.min.js') }}"></script>
+</head>
+
+<body>
+    <!--为ECharts准备一个具备大小（宽高）的Dom-->
+    <div id="main" style="height:500px;border:1px solid #ccc;padding:10px;"></div>
+    <script type="text/javascript">
+    //--- 折柱 ---
+    var myChart = echarts.init(document.getElementById('main'));
+    var data = $.getJSON('/sys_info')
+    //alert(data)
+    myChart.setOption({
+        title: {
+            text: '服务器CPU性能参数'
+        },
+        tooltip: {},
+        legend: {
+            data:['user_use','sys_use','io_use']
+        },
+        xAxis: {
+            type:'time',
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: 'user_use',
+            type: 'line',
+            data: []
+        },{
+            name: 'sys_use',
+            type: 'line',
+            data: []
+        },{
+            name: 'io_use',
+            type: 'line',
+            data: []
+        }]
+    });
+
+
+
+    //准备好统一的 callback 函数
+    var update_mychart = function (data) { //data是json格式的response对象
+
+        // 切片是能统一的关键！！
+        record_time = data.getJSON('record_time'); // 时间数据
+        user_use = data.getJSON('user_use') // 用户使用cpu
+        sys_use = data.getJSON('sys_use'); // 系统使用cpu
+        io_use = data.getJSON('io_use');  // io占用cpu
+
+        alert("已进入该函数")
+        // 填入数据
+        myChart.setOption({
+            xAxis: {
+                data: record_time
+            },
+            series: [{
+                name: 'user_use', // 根据名字对应到相应的系列
+                data: user_use
+            },{
+                name: 'sys_use',
+                data: sys_use
+            },{
+                name: 'io_use',
+                data: io_use
+            }]
+        });
+
+    }
+
+
+    // 异步更新数据 （以后，定时post，取回1个数据）
+    //var timeTicket = setInterval(function () {
+    //    $.post('/sys_info',{id: lastID}).done(update_mychart);
+    //}, 3000);
+
+    </script>
+</body>
+</html>
