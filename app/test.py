@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, render_template, redirect, url_for, session, flash,jsonify
+from flask import Flask, render_template, redirect, url_for, session, flash,jsonify,request
 from flask_bootstrap import Bootstrap
 from flask_wtf import Form
 from wtforms import StringField, SubmitField
@@ -102,15 +102,18 @@ def index():
 
 @app.route('/sys_info',methods=["POST","GET"])
 def sys_info():
+    new_cpu_sql = (cpu_sql % int(request.form.get('id',0)))
+    print("hello im post")
     db = queryDB()
-    db.query_db(cpu_sql)
+    db.query_db(new_cpu_sql)
     data = db.datas
     return jsonify(
-    user_use = [x[0] for x in data],
-    sys_use = [x[1] for x in data],
-    io_use = [x[2] for x in data],
-    record_time = [x[-1].strip('\n') for x in data]
-    )
+        user_use = [x[0] for x in data],
+        sys_use = [x[1] for x in data],
+        io_use = [x[2] for x in data],
+        record_time = [x[-1].strip('\n') for x in data]
+        )
+
 
 @app.route('/cpuinfo')
 def cpu_info():
@@ -125,6 +128,9 @@ def page_not_found(e):
 def server_error(e):
     return render_template('500.html'), 500
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

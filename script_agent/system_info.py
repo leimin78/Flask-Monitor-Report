@@ -28,7 +28,7 @@ class getSystemInfo():
     """server_name|server_ip|site_id|cpu|user_use|sys_use|io_use|idle|record_time"""
     def getCpuInfo(self):
         cmd = subprocess.Popen("""top -b -n1|grep Cpu |awk -F' ' '{print $2"|"$3"|"$5"|"$6}'""",shell=True,stdout=subprocess.PIPE)
-        record_time = time.strftime("%Y%m%d%M%S",time.localtime())
+        record_time = time.strftime("%Y%m%d%H%M%S",time.localtime())
         cpuinfo = cmd.stdout.readlines()[0]
         user_use = cpuinfo.split('|')[0].split('%')[0]
         sys_use = cpuinfo.split('|')[1].split('%')[0]
@@ -43,7 +43,7 @@ class getSystemInfo():
     """server_name|server_ip|site_id|mem|mem_use|mem_free|mem_buffer|mem_total|record_time"""
     def getMeminfo(self):
         cmd = subprocess.Popen("""top -b -n1|grep Mem|awk -F' ' '{print $2","$4","$6","$8}'""",shell=True,stdout=subprocess.PIPE)
-        record_time = time.strftime("%Y%m%d%M%S",time.localtime())
+        record_time = time.strftime("%Y%m%d%H%M%S",time.localtime())
         mem_info = cmd.stdout.readlines()[0]
         mem_use = mem_info.split(',')[1].split('k')[0]
         mem_free = mem_info.split(',')[2].split('k')[0]
@@ -62,7 +62,7 @@ class getSystemInfo():
     def getDiskinfo(self):
         cmd = subprocess.Popen(""" df -hl|sed -n '2,$p'|awk -F' ' '{print $2","$3","$6}' """,shell=True,stdout=subprocess.PIPE)
         for line in cmd.stdout.readlines():
-            record_time = time.strftime("%Y%m%d%M%S", time.localtime())
+            record_time = time.strftime("%Y%m%d%H%M%S", time.localtime())
             disk_lun = line.split(',')[-1].strip('\n')
             disk_uesd = line.split(',')[-2]
             disk_total = line.split(',')[-3]

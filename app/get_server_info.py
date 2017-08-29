@@ -2,7 +2,7 @@ import sqlite3
 
 
 DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/app/data.sqlite'
-cpu_sql = """select user_use,sys_use,io_use,host_ip,record_time from sys_info where user_use is not null order by id limit 100 """
+cpu_sql = """select * from (select rowid,user_use,sys_use,io_use,record_time from sys_info where user_use is not null) limit %d,1000"""
 
 
 class queryDB:
