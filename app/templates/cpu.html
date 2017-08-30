@@ -1,0 +1,25 @@
+<html>
+    <head>
+            <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    </head>
+    <body>
+        <table border="2" align="center"  class="imagetable">
+            <tr>
+                <th>主机名</th>
+                <th>IP地址</th>
+                <th>CPU</th>
+                <th>内存(MB)</th>
+                <th>SWAP(MB)</th>
+                <th>操作系统</th>
+                <th>内核版本</th>
+                <th>运行时长</th>
+                <th>当前时间</th>
+            </tr>
+            <tr>
+                % for item in result["agent_static"]:
+                    <td>{{item}}</td>
+                % end
+            </tr>
+        </table>
+    </body>
+</html>

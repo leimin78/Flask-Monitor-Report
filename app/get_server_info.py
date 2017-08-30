@@ -3,7 +3,7 @@ import sqlite3
 
 DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/app/data.sqlite'
 cpu_sql = """select * from (select rowid,user_use,sys_use,io_use,record_time from sys_info where user_use is not null) limit %d,1000"""
-
+site_info_sql = """ select site_id,site_name from site_info group by site_id,site_name """
 
 class queryDB:
     # 初始化查询连接

@@ -143,6 +143,7 @@ def load_user(user_id):
 @app.route('/cpuinfo')
 @login_required
 def cpu_info():
+
     return render_template('cpu_info.html')
 
 @app.errorhandler(404)
@@ -171,6 +172,17 @@ def login():
             login_user(user, remember=True)
             return redirect(url_for('cpu_info'))
     return render_template('login.html')
+
+#局点服务器列表页面
+@app.route('/site_info',methods=['GET','POST'])
+def agentInfo():
+    db = queryDB()
+    db.query_db(site_info_sql)
+    site_info = db.datas
+    print(site_info)
+    print(type(site_info))
+    num = 0
+    return render_template('site_info.html',site_info=site_info,num=num)
 
 if __name__ == '__main__':
     manager.run()
