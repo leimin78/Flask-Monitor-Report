@@ -102,6 +102,9 @@ class SysInfo(db.Model):
     lun_use = db.Column(db.Float,nullable=True)
     lun_size = db.Column(db.Float,nullable=True)
 
+    system_version = db.Column(db.String(128),nullable=True)
+    server_uptime = db.Column(db.String(128),nullable=True)
+
     record_time = db.Column(db.String(14))
     host_ip = db.Column(db.String(30),db.ForeignKey('server_info.server_ip'))
 
@@ -175,14 +178,28 @@ def login():
 
 #局点服务器列表页面
 @app.route('/site_info',methods=['GET','POST'])
-def agentInfo():
+def siteInfo():
     db = queryDB()
     db.query_db(site_info_sql)
     site_info = db.datas
-    print(site_info)
-    print(type(site_info))
-    num = 0
-    return render_template('site_info.html',site_info=site_info,num=num)
+    return render_template('site_info.html',site_info=site_info)
+
+@app.route('/server_info/<siteid>',methods=['GET','POST'])
+def serverList(siteid):
+    db = queryDB()
+    print(siteid)
+    site_server_sql = server_list_sql.format(site_id=siteid)
+    site_name_new_sql = site_name_sql.format(site_id=siteid)
+    print(site_server_sql)
+    db.query_db(site_server_sql)
+    server_list = db.datas
+    db.query_db(site_name_new_sql)
+    site_name = db.datas[0][0]
+    return render_template('server_info.html',server_list=server_list,site_name=site_name)
+
+@app.route('/server_detail',methods=['GET','POST'])
+def serverDetail():
+    return render_template('server_detail.html')
 
 if __name__ == '__main__':
     manager.run()

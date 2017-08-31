@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>服务器详细信息</title>
+    <script src="{{ url_for('static',filename='js/echarts.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/dark.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ns_tb.css') }}">
+    <script type="text/javascript">
+    setTimeout(function(){window.location.reload()}, 6000000);
+    </script>
+</head>
+<body bgcolor="#333">
+    <h2 align="center"><font color="FFFFFF">各个图表都可以使用鼠标拖动和滚轮缩放</font></h2>
+
+    <h4 align="center"><font color="FFFFFF">节点基本信息</font></h4>
+    <table border="2" align="center"  class="imagetable">
+            <tr>
+                <th>主机名</th>
+                <th>IP地址</th>
+                <th>操作系统</th>
+                <th>内核版本</th>
+                <th>运行时长</th>
+                <th>当前时间</th>
+            </tr>
+            <tr>
+                <td>NULL</td>
+                <td>NULL</td>
+                <td>NULL</td>
+                <td>NULL</td>
+                <td>NULL</td>
+                <td>NULL</td>
+            </tr>
+        </table>
+
+    <!-- 磁盘信息 -->
+    <table align="center">
+		<h4 align="center"><font color="FFFFFF">节点磁盘存储信息统计</font></h4>
+		<table border="2" align="center"  class="imagetable">
+			<tr>
+				<th>序号</th>
+				<th>文件系统</th>
+				<th>总大小</th>
+				<th>已用</th>
+				<th>剩余</th>
+				<th>使用率</th>
+				<th>挂载点</th>
+			</tr>
+			<tr>
+				<td>NULL</td>
+				<td>NULL</td>
+                <td>NULL</td>
+				<td>NULL</td>
+                <td>NULL</td>
+				<td>NULL</td>
+                <td>NULL</td>
+			</tr>
+		</table>
+    </table>
+</body>
+</html>

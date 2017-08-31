@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{{ site_name }} 服务器列表</title>
+    </head>
+    <script type="text/javascript">
+    setTimeout(function(){window.location.reload()}, 600000);
+    </script>
+    <style type="text/css">
+    #tdFontColor {color: white;}
+    a {color: inherit;}
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ns_tb.css') }}">
+    <body bgcolor="#333" >
+        <h2 align="center"><font color="FFFFFF">{{site_name}} 服务器列表</font></h2>
+
+        <table border="2" align="center" class="imagetable">
+            <tr>
+                <th>序号</th>
+                <th>局点编号</th>
+                <th>服务器名</th>
+                <th>服务器IP</th>
+                <th>服务器CPU</th>
+                <th>服务器内存</th>
+                <th>详情</th>
+            </tr>
+            {% for site_id,server_name,server_ip in server_list %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <!--主机名和IP字段-->
+                <td>{{ site_id }}</td>
+                <td>{{ server_name }}</td>
+                <td>{{ server_ip }}</td>
+                <td>10%</td>
+                <td>5%</td>
+                <td>点我查看服务器详情</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+        <footer>
+            <!-- 签名 -->
+            <div class="signature">Powered by <font color="FFFF11F">LeiMin @ Python / Operation Department</font>
+            </div>
+        </footer>
+    </body>
+</html>

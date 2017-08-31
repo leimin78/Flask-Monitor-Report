@@ -3,10 +3,18 @@
 
 import time
 import subprocess
+import socket
+import platform
+from datetime import timedelta
 
-#定义服务器名及服务器IP,局点
-server_name = 'SUSE-35'
-server_ip = '192.168.0.35'
+#定义服务器基本信息,运行时间,服务器名,服务器IP,系统版本,局点id
+with open('/proc/uptime','r') as f:
+    uptime_seconds = float(f.readline().split()[0])
+    uptime_time = str(timedelta(seconds=uptime_seconds))
+    server_uptime = uptime_time.split('.', 1)[0]
+server_name = socket.gethostname()
+server_ip = socket.gethostbyname(server_name)
+system_version =" ".join(platform.linux_distribution())
 site_id = 'C10'
 
 class getSystemInfo():
@@ -22,6 +30,17 @@ class getSystemInfo():
             with open(self.file_name,'w') as f:
                 print("文件不存在，已创建")
                 pass
+
+    #获取系统基本信息,并写入文件
+
+    #获系统基本信息
+    """server_name|server_ip|site_id|base|system_version|server_uptime|record_time"""
+    def getBaseInfo(self):
+        record_time = time.strftime("%Y%m%d%H%M%S",time.localtime())
+        with open(self.file_name,'a') as f:
+            line = server_name+'|'+server_ip+'|'+site_id+'|'+'base'+'|'+system_version+'|'+server_uptime+'|'+record_time+'\n'
+            f.write(line)
+
 
     #获取cpu信息,并写入文件
     """Cpu(s):  1.4%us,  0.4%sy,  0.0%ni, 97.9%id,  0.3%wa,  0.0%hi,  0.0%si,  0.0%st"""
@@ -70,8 +89,10 @@ class getSystemInfo():
             with open(self.file_name,'a') as f:
                 f.write(disk_line)
 
+
 if __name__ == '__main__':
     sysinfo = getSystemInfo()
+    sysinfo.getBaseInfo()
     sysinfo.getCpuInfo()
     sysinfo.getMeminfo()
     sysinfo.getDiskinfo()

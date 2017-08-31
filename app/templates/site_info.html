@@ -21,6 +21,8 @@
                 <th>序号</th>
                 <th>局点编号</th>
                 <th>局点名称</th>
+                <th>局点告警</th>
+                <th>局点服务器列表</th>
             </tr>
             {% for site_id,site_name in site_info %}
             <tr>
@@ -28,9 +30,10 @@
                 <!--主机名和IP字段-->
                 <td>{{ site_id }}</td>
                 <td>{{ site_name }}</td>
+                <td><a href="#">点击查看告警</a></td>
+                <td><a href="{{ url_for('serverList',siteid= site_id,_external=True)}}">点击查看服务器信息</a></td>
             </tr>
             {% endfor %}
-
         </table>
         <footer>
             <!-- 签名 -->

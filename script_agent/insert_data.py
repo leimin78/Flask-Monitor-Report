@@ -27,6 +27,11 @@ class parseText:
                     %(lis[4],lis[5],lis[6],lis[1],lis[-1])
                     sql_list.append(disk_sql)
 
+                elif lis[3] == 'base':
+                    base_sql = """ insert into sys_info('system_version','server_uptime','host_ip','record_time') values('%s','%s','%s','%s')"""\
+                    %(lis[4],lis[5],lis[1],lis[-1])
+                    sql_list.append(base_sql)
+
                 else:
                     pass
         return sql_list
@@ -38,6 +43,7 @@ class insertData:
 
     #初始化数据链接定义游标
     def __init__(self):
+        print("数据库链接初始化..数据写入中.")
         self.conn = sqlite3.connect(DB_FILE)
         self.cur = self.conn.cursor()
 
