@@ -15,8 +15,6 @@ class parseText:
                 if lis[3] == 'cpu':
                     cpu_sql = """ insert into sys_info('user_use','sys_use','io_use','idle_use','host_ip','record_time') values ('%s','%s','%s','%s','%s','%s')"""\
                     %(lis[4],lis[5],lis[6],lis[7],lis[1],lis[-1])
-                    print (lis)
-                    print(cpu_sql)
                     sql_list.append(cpu_sql)
 
                 elif lis[3] == 'mem':
@@ -46,7 +44,6 @@ class insertData:
     #执行相关脚本
     def executesql(self,sql_list):
         for sql in sql_list:
-            print(sql)
             self.cur.execute(sql)
             self.conn.commit()
 
