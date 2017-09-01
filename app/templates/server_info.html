@@ -33,9 +33,21 @@
                 <td>{{ site_id }}</td>
                 <td>{{ server_name }}</td>
                 <td>{{ server_ip }}</td>
-                <td>10%</td>
-                <td>5%</td>
-                <td>点我查看服务器详情</td>
+                <td>
+                    {% for cpu_use in cpu_use_list %}
+                        {% if cpu_use[-1] == server_ip %}
+                            {{ cpu_use[1] }}%
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for mem_use in mem_use_list %}
+                        {% if mem_use[-1] == server_ip %}
+                            {{ mem_use[1]*100 }}%
+                        {% endif %}
+                    {% endfor %}
+                </td>
+                <td><a href="{{ url_for('serverDetail',serverip=server_ip) }}">点我查看服务器详情</a></td>
             </tr>
             {% endfor %}
 

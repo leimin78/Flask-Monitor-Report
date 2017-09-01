@@ -1,4 +1,5 @@
 import os
+import time
 from flask import Flask, render_template, redirect, url_for, session, flash,jsonify,request
 from flask_bootstrap import Bootstrap
 from flask_wtf import Form
@@ -113,16 +114,7 @@ class SysInfo(db.Model):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    name = None
-    form = NameForm()
-    if form.validate_on_submit():
-        old_name = session.get('name')
-        if old_name is not None and old_name != form.name.data:
-            flash('你刚才改过输入了.')
-        session['name'] = form.name.data
-        form.name.data = ''
-        return redirect(url_for('index'))
-    return render_template('index.html', form=form, name=session.get('name'))
+    return redirect('login')
 
 
 @app.route('/sys_info',methods=["POST","GET"])
@@ -143,11 +135,6 @@ def sys_info():
 def load_user(user_id):
     return UserInfo.query.get(int(user_id))
 
-@app.route('/cpuinfo')
-@login_required
-def cpu_info():
-
-    return render_template('cpu_info.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -173,7 +160,7 @@ def login():
             return redirect(url_for('login'))
         else:
             login_user(user, remember=True)
-            return redirect(url_for('cpu_info'))
+            return redirect(url_for('siteInfo'))
     return render_template('login.html')
 
 #局点服务器列表页面
@@ -191,15 +178,67 @@ def serverList(siteid):
     site_server_sql = server_list_sql.format(site_id=siteid)
     site_name_new_sql = site_name_sql.format(site_id=siteid)
     print(site_server_sql)
+
+    #获取局点相关的服务器列表
     db.query_db(site_server_sql)
     server_list = db.datas
+
+    #获取局点名
     db.query_db(site_name_new_sql)
     site_name = db.datas[0][0]
-    return render_template('server_info.html',server_list=server_list,site_name=site_name)
 
-@app.route('/server_detail',methods=['GET','POST'])
-def serverDetail():
-    return render_template('server_detail.html')
+    #获取最近CPU使用率
+    db.query_db(cpu_use_sql)
+    cpu_use_list = db.datas
+
+    #获取最近内存使用率
+    db.query_db(mem_use_sql)
+    mem_use_list = db.datas
+
+    return render_template('server_info.html',server_list=server_list,site_name=site_name,cpu_use_list=cpu_use_list,
+                           mem_use_list=mem_use_list)
+
+@app.route('/server_detail/<serverip>',methods=['GET','POST'])
+def serverDetail(serverip):
+
+    #获取主机名
+    db = queryDB()
+    db.query_db(server_name_sql.format(ip=serverip))
+    server_name = db.datas[0][0]
+
+    #获取，系统版本，系统运行时间信息
+    db.query_db(system_info_sql.format(ip=serverip))
+    sys_info = db.datas
+
+    #获取磁盘信息
+    db.query_db(disk_info_sql.format(ip=serverip))
+    disk_info = db.datas
+
+    #获取cpu列表信息
+    db.query_db(cpu_info_list_sql.format(ip=serverip))
+    cpu_info_list = db.datas
+
+    cpu_user = [x[0] for x in cpu_info_list]
+    cpu_system = [x[1] for x in cpu_info_list]
+    cpu_io = [x[2] for x in cpu_info_list]
+    cpu_idle = [x[3] for x in cpu_info_list]
+    cpu_time = [x[4].split('\n')[0] for x in cpu_info_list]
+    new_cpu_time = []
+    for cputime in cpu_time:
+        local = time.mktime(time.strptime(cputime, "%Y%m%d%H%M%S"))
+        new_cpu_time.append(time.strftime("%Y%m%d-%H:%M:%S",time.localtime(local)))
+
+
+    return render_template('server_detail.html',
+                           server_name=server_name,
+                           sys_info=sys_info,
+                           disk_info=disk_info,
+                           cpu_user=cpu_user,
+                           cpu_system = cpu_system,
+                           cpu_io = cpu_io,
+                           cpu_idle = cpu_idle,
+                           new_cpu_time = new_cpu_time
+                           )
 
 if __name__ == '__main__':
-    manager.run()
+    app.run(host='0.0.0.0',port=80)

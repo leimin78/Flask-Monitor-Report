@@ -7,55 +7,152 @@
     <script src="{{ url_for('static',filename='js/dark.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ns_tb.css') }}">
     <script type="text/javascript">
-    setTimeout(function(){window.location.reload()}, 6000000);
+        setTimeout(function () {
+            window.location.reload()
+        }, 6000000);
     </script>
 </head>
 <body bgcolor="#333">
-    <h2 align="center"><font color="FFFFFF">各个图表都可以使用鼠标拖动和滚轮缩放</font></h2>
+<h2 align="center"><font color="FFFFFF">各个图表都可以使用鼠标拖动和滚轮缩放</font></h2>
 
-    <h4 align="center"><font color="FFFFFF">节点基本信息</font></h4>
-    <table border="2" align="center"  class="imagetable">
-            <tr>
-                <th>主机名</th>
-                <th>IP地址</th>
-                <th>操作系统</th>
-                <th>内核版本</th>
-                <th>运行时长</th>
-                <th>当前时间</th>
-            </tr>
-            <tr>
-                <td>NULL</td>
-                <td>NULL</td>
-                <td>NULL</td>
-                <td>NULL</td>
-                <td>NULL</td>
-                <td>NULL</td>
-            </tr>
-        </table>
+<h4 align="center"><font color="FFFFFF">节点基本信息</font></h4>
+<table border="2" align="center" class="imagetable">
+    <tr>
+        <th>主机名</th>
+        <th>IP地址</th>
+        <th>操作系统</th>
+        <th>运行时长</th>
+        <th>当前时间</th>
+    </tr>
+    <tr>
+        <td>{{server_name}}</td>
+        <td>{{ sys_info[0][1] }}</td>
+        <td>{{ sys_info[0][2] }}</td>
+        <td>{{ sys_info[0][3] }}</td>
+        <td>{{ sys_info[0][4] }}</td>
+    </tr>
+</table>
 
-    <!-- 磁盘信息 -->
-    <table align="center">
-		<h4 align="center"><font color="FFFFFF">节点磁盘存储信息统计</font></h4>
-		<table border="2" align="center"  class="imagetable">
-			<tr>
-				<th>序号</th>
-				<th>文件系统</th>
-				<th>总大小</th>
-				<th>已用</th>
-				<th>剩余</th>
-				<th>使用率</th>
-				<th>挂载点</th>
-			</tr>
-			<tr>
-				<td>NULL</td>
-				<td>NULL</td>
-                <td>NULL</td>
-				<td>NULL</td>
-                <td>NULL</td>
-				<td>NULL</td>
-                <td>NULL</td>
-			</tr>
-		</table>
+<!-- 磁盘信息 -->
+<table align="center">
+    <h4 align="center"><font color="FFFFFF">节点磁盘存储信息统计</font></h4>
+    <table border="2" align="center" class="imagetable">
+        <tr>
+            <th>序号</th>
+            <th>总大小</th>
+            <th>已用</th>
+            <th>使用率</th>
+            <th>挂载点</th>
+        </tr>
+        {% for disk in disk_info %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ disk[-2] }}</td>
+            <td>{{ disk[-3] }}</td>
+            <td>{{ disk[-1] }}</td>
+            <td>{{ disk[-4] }}</td>
+        </tr>
+        {% endfor %}
     </table>
+</table>
+<script type="text/javascript">
+        var cpu_date_arr = new Array();
+        {% for cpu_time_item in new_cpu_time %}
+        cpu_date_arr.push("{{cpu_time_item}}");
+        {% endfor %}
+</script>
+
+<!-- 为cpu-ECharts准备一个具备大小（宽高）的Dom -->
+<div id="cpu" align="left" style="width: 1750px;height:250px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChartCpu = echarts.init(document.getElementById('cpu'), 'dark');
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '节点CPU使用记录'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross',
+                label: {
+                    backgroundColor: '#6a7985'
+                }
+            }
+        },
+        legend: {
+            data:[ 'USER(%)', 'SYSTEM(%)', 'IOWAIT(%)','IDLE(%)']
+        },
+        toolbox: {
+            show: true,
+            feature: {
+                magicType: {type: ['line', 'bar']},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        dataZoom: [
+            {
+                type: 'inside',
+                start: 0,
+                end: 100,
+                startValue: cpu_date_arr
+            }
+        ],
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+                type: 'category',
+                name: '时间',
+                nameLocation: 'end',
+                boundaryGap: false,
+                nameGap: 40,
+                data: cpu_date_arr
+            }
+        ],
+        yAxis: [
+            {
+                type: 'value',
+                axisLabel: {
+                    formatter: '{value} %'
+                },
+                 name: 'CPU使用率(%)'
+            }
+        ],
+        series: [
+            {
+                name: 'IOWAIT(%)',
+                type: 'line',
+                data: {{cpu_io}}
+            },
+            {
+                name: 'USER(%)',
+                type: 'line',
+                data: {{cpu_user}}
+            },
+            {
+                name: 'SYSTEM(%)',
+                type: 'line',
+                data: {{cpu_system}}
+            },
+            {
+                name: 'IDLE(%)',
+                type: 'line',
+                data: {{cpu_idle}}
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChartCpu.setOption(option);
+</script>
+
+<br/>
 </body>
 </html>
