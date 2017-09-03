@@ -75,17 +75,18 @@ class getSystemInfo():
 
     #获取磁盘信息,并写入文件
     """
-    server_name|server_ip|site_id|disk|/|disk_used|disk_total|record_time
+    server_name|server_ip|site_id|disk|/|disk_used|disk_total|disk_rate|record_time
     /dev/sda2             392G  108G  265G  29% /
     """
     def getDiskinfo(self):
-        cmd = subprocess.Popen(""" df -hl|sed -n '2,$p'|awk -F' ' '{print $2","$3","$6}' """,shell=True,stdout=subprocess.PIPE)
+        cmd = subprocess.Popen(""" df -hl|sed -n '2,$p'|awk -F' ' '{print $2","$3","$5","$6}' """,shell=True,stdout=subprocess.PIPE)
         for line in cmd.stdout.readlines():
             record_time = time.strftime("%Y%m%d%H%M%S", time.localtime())
             disk_lun = line.split(',')[-1].strip('\n')
-            disk_uesd = line.split(',')[-2]
-            disk_total = line.split(',')[-3]
-            disk_line = server_name+'|'+server_ip+'|'+site_id+'|'+'disk'+'|'+disk_lun+'|'+disk_uesd+'|'+disk_total+'|'+record_time+'\n'
+            disk_rate = line.split(',')[-2]
+            disk_uesd = line.split(',')[-3]
+            disk_total = line.split(',')[-4]
+            disk_line = server_name+'|'+server_ip+'|'+site_id+'|'+'disk'+'|'+disk_lun+'|'+disk_uesd+'|'+disk_total+'|'+disk_rate+'|'+record_time+'\n'
             with open(self.file_name,'a') as f:
                 f.write(disk_line)
 

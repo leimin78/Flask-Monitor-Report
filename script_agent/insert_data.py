@@ -5,6 +5,7 @@ import time
 DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/app/data.sqlite'
 SYS_TEXT = 'system_info_'+ time.strftime("%Y%m%d", time.localtime())+'.txt'
 
+
 class parseText:
     #解析系统文本文件，生成入库脚本
     def parseSysText(self):
@@ -23,8 +24,8 @@ class parseText:
                     sql_list.append(mem_sql)
 
                 elif lis[3] == 'disk':
-                    disk_sql = """ insert into sys_info('lun_name','lun_use','lun_size','host_ip','record_time') values ('%s','%s','%s','%s','%s')"""\
-                    %(lis[4],lis[5],lis[6],lis[1],lis[-1])
+                    disk_sql = """ insert into sys_info('lun_name','lun_use','lun_size','lun_rate','host_ip','record_time') values ('%s','%s','%s','%s','%s','%s')"""\
+                    %(lis[4],lis[5],lis[6],lis[7],lis[1],lis[-1])
                     sql_list.append(disk_sql)
 
                 elif lis[3] == 'base':

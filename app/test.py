@@ -229,6 +229,17 @@ def serverDetail(serverip):
         new_cpu_time.append(time.strftime("%Y%m%d-%H:%M:%S",time.localtime(local)))
 
 
+    #获取内存列表信息
+    db.query_db(mem_info_list_sql.format(ip=serverip))
+    mem_info_list = db.datas
+
+    mem_use = [x[0] for x in mem_info_list]
+    mem_time = [x[1].split('\n')[0] for x in mem_info_list]
+    new_mem_time = []
+    for memtime in mem_time:
+        local1 = time.mktime(time.strptime(memtime, "%Y%m%d%H%M%S"))
+        new_mem_time.append(time.strftime("%Y%m%d-%H:%M:%S",time.localtime(local1)))
+
     return render_template('server_detail.html',
                            server_name=server_name,
                            sys_info=sys_info,
@@ -237,8 +248,10 @@ def serverDetail(serverip):
                            cpu_system = cpu_system,
                            cpu_io = cpu_io,
                            cpu_idle = cpu_idle,
-                           new_cpu_time = new_cpu_time
+                           new_cpu_time = new_cpu_time,
+                           mem_use = mem_use,
+                           new_mem_time = new_mem_time
                            )
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=80)
+    app.run(host='0.0.0.0')

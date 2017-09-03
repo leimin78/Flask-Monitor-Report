@@ -13,6 +13,7 @@ system_info_sql = """select max(rowid),host_ip,system_version,server_uptime,reco
 disk_info_sql = """select max(rowid),lun_name,lun_use,lun_size,lun_rate from sys_info where lun_name is not null and host_ip='{ip}' group by lun_name"""
 
 cpu_info_list_sql = """select user_use,sys_use,io_use,idle_use,record_time from sys_info where user_use is not null and host_ip='{ip}'"""
+mem_info_list_sql = """select round(1-(mem_free+mem_buffer)/mem_total,2)*100,record_time from sys_info where mem_free is not null and host_ip='{ip}'"""
 
 class queryDB:
     # 初始化查询连接
