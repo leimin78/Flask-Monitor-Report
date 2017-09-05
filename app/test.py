@@ -1,5 +1,5 @@
 import os
-import time
+import time,datetime
 from flask import Flask, render_template, redirect, url_for, session, flash,jsonify,request
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -66,10 +66,21 @@ class UserInfo(UserMixin,db.Model):
 class ServerInfo(db.Model):
     __tablename__ = 'server_info'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
     server_name = db.Column(db.String(100),unique=True)
     server_ip = db.Column(db.String(30),unique=True)
-
     server_site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
+
+#局点维护报表,局点名,日期,数据类型,数据
+class SiteReport(db.Model):
+    __tablename__ = 'site_report'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    pk_ds_day = db.Column(db.String(14),nullable=True)
+    pk_ds_stat_type = db.Column(db.String(14),nullable=True)
+    ds_num = db.Column(db.String(100),nullable=True)
+    site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
+
 
 #系统状态表,cpu用户使用,cpu系统使用,cpu_io使用,cpu空闲,
 # 内存使用,内存剩余,内存buffer,内存总量
@@ -92,6 +103,7 @@ class SysInfo(db.Model):
     lun_name = db.Column(db.String(10),nullable=True)
     lun_use = db.Column(db.Float,nullable=True)
     lun_size = db.Column(db.Float,nullable=True)
+    lun_rate = db.Column(db.Float, nullable=True)
 
     system_version = db.Column(db.String(128),nullable=True)
     server_uptime = db.Column(db.String(128),nullable=True)
@@ -189,6 +201,9 @@ def serverList(siteid):
 @app.route('/server_detail/<serverip>',methods=['GET','POST'])
 def serverDetail(serverip):
 
+    #设置时间参数
+    week_time = datetime.datetime.now() - datetime.timedelta(days=7)
+    new_week_time = week_time.strftime("%Y%m%d%H%M%S")
     #获取主机名
     db = queryDB()
     db.query_db(server_name_sql.format(ip=serverip))
@@ -203,7 +218,8 @@ def serverDetail(serverip):
     disk_info = db.datas
 
     #获取cpu列表信息
-    db.query_db(cpu_info_list_sql.format(ip=serverip))
+    print(cpu_info_list_sql.format(ip=serverip,weektime=new_week_time))
+    db.query_db(cpu_info_list_sql.format(ip=serverip,weektime=new_week_time))
     cpu_info_list = db.datas
 
     cpu_user = [x[0] for x in cpu_info_list]
@@ -218,7 +234,7 @@ def serverDetail(serverip):
 
 
     #获取内存列表信息
-    db.query_db(mem_info_list_sql.format(ip=serverip))
+    db.query_db(mem_info_list_sql.format(ip=serverip,weektime=new_week_time))
     mem_info_list = db.datas
 
     mem_use = [x[0] for x in mem_info_list]
