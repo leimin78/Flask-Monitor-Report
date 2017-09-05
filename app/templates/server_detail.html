@@ -83,11 +83,12 @@
             }
         },
         legend: {
-            data:[ 'USER(%)', 'SYSTEM(%)', 'IOWAIT(%)','IDLE(%)']
+            data:[ 'USER(%)', 'SYSTEM(%)', 'IOWAIT(%)']
         },
         toolbox: {
             show: true,
             feature: {
+                dataView: {show: true, readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
                 saveAsImage: {}
@@ -141,11 +142,6 @@
                 name: 'SYSTEM(%)',
                 type: 'line',
                 data: {{cpu_system}}
-            },
-            {
-                name: 'IDLE(%)',
-                type: 'line',
-                data: {{cpu_idle}}
             }
         ]
     };
@@ -187,6 +183,7 @@
         toolbox: {
             show: true,
             feature: {
+                dataView: {show: true, readOnly: false},
                 magicType: {type: ['line', 'bar']},
                 restore: {},
                 saveAsImage: {}
@@ -229,7 +226,7 @@
             {
                 name: '内存(%)',
                 type: 'line',
-                data: {{mem_use}}
+                data: {{ mem_use }}
             }
         ]
     };

@@ -1,5 +1,6 @@
-import sqlite3
+### 该文件为sql语句及数据库相关操作
 
+import sqlite3
 
 DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/app/data.sqlite'
 
@@ -15,6 +16,7 @@ disk_info_sql = """select max(rowid),lun_name,lun_use,lun_size,lun_rate from sys
 cpu_info_list_sql = """select user_use,sys_use,io_use,idle_use,record_time from sys_info where user_use is not null and host_ip='{ip}'"""
 mem_info_list_sql = """select round(1-(mem_free+mem_buffer)/mem_total,2)*100,record_time from sys_info where mem_free is not null and host_ip='{ip}'"""
 
+
 class queryDB:
     # 初始化查询连接
     def __init__(self):
@@ -26,14 +28,3 @@ class queryDB:
 
     def __del__(self):
         self.conn.close()
-
-    #将数据转换为dict存入列表方便转换json数据
-    def cpu_info(self):
-        self.cpu = []
-        d = {}
-        for data in self.datas:
-            d['user_use'] = data[0]
-            d['sys_use'] = data[1]
-            d['io_use'] = data[2]
-            d['record_time'] = data[-1].strip('\n')
-            self.cpu.append(d)

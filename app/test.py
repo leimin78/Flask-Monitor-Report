@@ -2,9 +2,6 @@ import os
 import time
 from flask import Flask, render_template, redirect, url_for, session, flash,jsonify,request
 from flask_bootstrap import Bootstrap
-from flask_wtf import Form
-from wtforms import StringField, SubmitField
-from wtforms.validators import Required
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate,MigrateCommand
 from flask_login import LoginManager,login_user,login_required,logout_user,UserMixin
@@ -13,13 +10,6 @@ from get_server_info  import *
 from werkzeug.security import generate_password_hash, check_password_hash
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-
-# 定义表单
-class NameForm(Form):
-    name = StringField('What is your name?', validators=[Required()])
-    submit = SubmitField('Submit')
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
@@ -128,7 +118,7 @@ def sys_info():
         user_use = [x[0] for x in data],
         sys_use = [x[1] for x in data],
         io_use = [x[2] for x in data],
-        record_time = [x[-1].strip('\n') for x in data]
+        record_time = [x[-1] for x in data]
         )
 
 @login_manager.user_loader
@@ -174,10 +164,8 @@ def siteInfo():
 @app.route('/server_info/<siteid>',methods=['GET','POST'])
 def serverList(siteid):
     db = queryDB()
-    print(siteid)
     site_server_sql = server_list_sql.format(site_id=siteid)
     site_name_new_sql = site_name_sql.format(site_id=siteid)
-    print(site_server_sql)
 
     #获取局点相关的服务器列表
     db.query_db(site_server_sql)
@@ -222,7 +210,7 @@ def serverDetail(serverip):
     cpu_system = [x[1] for x in cpu_info_list]
     cpu_io = [x[2] for x in cpu_info_list]
     cpu_idle = [x[3] for x in cpu_info_list]
-    cpu_time = [x[4].split('\n')[0] for x in cpu_info_list]
+    cpu_time = [x[4] for x in cpu_info_list]
     new_cpu_time = []
     for cputime in cpu_time:
         local = time.mktime(time.strptime(cputime, "%Y%m%d%H%M%S"))
@@ -234,7 +222,7 @@ def serverDetail(serverip):
     mem_info_list = db.datas
 
     mem_use = [x[0] for x in mem_info_list]
-    mem_time = [x[1].split('\n')[0] for x in mem_info_list]
+    mem_time = [x[1] for x in mem_info_list]
     new_mem_time = []
     for memtime in mem_time:
         local1 = time.mktime(time.strptime(memtime, "%Y%m%d%H%M%S"))
@@ -252,6 +240,17 @@ def serverDetail(serverip):
                            mem_use = mem_use,
                            new_mem_time = new_mem_time
                            )
+
+@app.route('/site_info/report/<siteid>',methods=["GET","POST"])
+def siteReport(siteid):
+
+    #获取局点名
+    db = queryDB()
+    site_name_new_sql = site_name_sql.format(site_id=siteid)
+    db.query_db(site_name_new_sql)
+    site_name = db.datas[0][0]
+
+    return render_template('site_report.html',site_name=site_name)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
