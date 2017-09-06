@@ -22,6 +22,9 @@ def setTimeList():
     return time_list
 
 time_list = setTimeList()
+report_time_list = ['20170831','20170901','20170902','20170903','20170904','20170905']
+ds_stat_type_list = ['13001','13002','13003','13027','13017','13009','13087','13018','13088','13007','13008']
+SITE_LIST = ['C11','C12','C13']
 
 class insertData:
     #初始化数据链接定义游标
@@ -89,6 +92,16 @@ class testData:
             %(system_version,server_uptime,hostip,record_time)
             self.sql_list.append(base_sql)
 
+    def initReport(self,siteid):
+        for time in report_time_list:
+            pk_ds_day = time
+            for ds_stat_type in ds_stat_type_list:
+                pk_ds_stat_type = ds_stat_type
+                ds_num = random.randint(300000,800000)
+                report_sql = """ insert into site_report(pk_ds_day,pk_ds_stat_type,ds_num,site_id) values('%s','%s','%s','%s')""" \
+                %(pk_ds_day,pk_ds_stat_type,ds_num,siteid)
+                self.sql_list.append(report_sql)
+
 if __name__ == '__main__':
     db = insertData()
     test = testData()
@@ -97,4 +110,6 @@ if __name__ == '__main__':
         test.initCpu(hostip)
         test.initMem(hostip)
         test.initDisk(hostip)
+    for siteid in SITE_LIST:
+        test.initReport(siteid)
     db.executesql(test.sql_list)

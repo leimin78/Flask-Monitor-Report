@@ -57,7 +57,7 @@
         {
             name: '日期',
             type: 'category',
-            data: ['20170903','20170902','20170901','20170831','20170830'],
+            data: {{day_time}},
             axisPointer: {
                 type: 'shadow'
             }
@@ -75,13 +75,13 @@
         {
             name:'开户用户数',
             type:'bar',
-            data:[1137, 926, 842, 869, 874]
+            data:{{sub_user}}
         },
 
         {
             name:'销户用户数',
             type:'bar',
-            data:[6860,716,904,1045,1117]
+            data:{{unsub_user}}
         },
     ]
 };
@@ -114,13 +114,13 @@
         }
     },
     legend: {
-        data:['总用户数']
+        data:['收费户数','总用户数']
     },
     xAxis: [
         {
             name: '日期',
             type: 'category',
-            data: ['20170903','20170902','20170901','20170831','20170830'],
+            data: {{day_time}},
             axisPointer: {
                 type: 'shadow'
             }
@@ -136,10 +136,16 @@
     ],
     series: [
         {
+            name:'收费户数',
+            type:'bar',
+            barWidth: '30%',
+            data:{{charge_user}}
+        },
+    {
             name:'总用户数',
             type:'bar',
             barWidth: '30%',
-            data:[4802963,4808686,4808476,4808537,4808710]
+            data:{{total_user}}
         }
     ]
 };
@@ -183,7 +189,7 @@
         {
             name: '日期',
             type: 'category',
-            data: ['20170903','20170902','20170901','20170831','20170830'],
+            data: {{day_time}},
             axisPointer: {
                 type: 'shadow'
             }
@@ -201,27 +207,27 @@
         {
             name:'呼叫数',
             type:'bar',
-            data:[34419816,34560134,34292635,36143897,36098990]
+            data:{{call_times}}
         },
          {
             name:'USSD发送数',
             type:'bar',
-            data:[12196269,12414670,11900334,12558927,12676832]
+            data:{{ussd_times}}
         },
          {
             name:'USSD发送成功数',
             type:'bar',
-            data:[12195784,12414053,11899760,12558275,12675991]
+            data:{{ussd_sucess}}
         },
          {
             name:'闪信发送数',
             type:'bar',
-            data:[0,0,0,0,0]
+            data:{{flash_times}}
         },
         {
             name:'闪信发送成功数',
             type:'bar',
-            data:[0,0,0,0,0]
+            data:{{flash_sucess}}
         }
     ]
 };
@@ -265,7 +271,7 @@
         {
             name: '日期',
             type: 'category',
-            data: ['20170903','20170902','20170901','20170831','20170830'],
+            data: {{day_time}},
             axisPointer: {
                 type: 'shadow'
             }
@@ -283,17 +289,19 @@
         {
             name:'上行短信数',
             type:'bar',
-            data:[24064,5743,5714,6595,7272]
+            data:{{mo_times}}
         },
          {
             name:'下行短信数',
             type:'bar',
-            data:[473436,410263,324512,369789,407094]
+            data:{{mt_times}}
         }
     ]
 };
-
     // 使用刚指定的配置项和数据显示图表。
     myChartSignatureMoMt.setOption(option);
 </script>
+
+<div class="signature" align="center">Powered by <font color="FFFF11F">LeiMin @ Python / Operation and maintenance department</font>
+</div>
 </body>

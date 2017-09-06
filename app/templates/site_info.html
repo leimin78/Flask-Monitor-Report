@@ -31,16 +31,13 @@
                 <!--主机名和IP字段-->
                 <td>{{ site_id }}</td>
                 <td>{{ site_name }}</td>
-                <td><a href="#">点击查看告警</a></td>
+                <td><a href="{{ url_for('siteAlarm',siteid=site_id,_external=True)}}">点击查看告警</a></td>
                 <td><a href="{{ url_for('siteReport',siteid=site_id,_external=True)}}">点击查看报表</a> </td>
                 <td><a href="{{ url_for('serverList',siteid= site_id,_external=True)}}">点击查看服务器信息</a></td>
             </tr>
             {% endfor %}
         </table>
-        <footer>
-            <!-- 签名 -->
-            <div class="signature">Powered by <font color="FFFF11F">LeiMin @ Python / Operation Department</font>
-            </div>
-        </footer>
+        <div class="signature" align="center">Powered by <font color="FFFF11F">LeiMin @ Python / Operation and maintenance department</font>
+        </div>
     </body>
 </html>

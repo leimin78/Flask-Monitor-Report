@@ -9,8 +9,14 @@ today = datetime.datetime.now().strftime('%Y%m%d')
 siteid = 'C10'
 
 #新文件名定义 siteId_alarm_report_today.txt
+
 alarm_report_file = os.path.join(basedir,siteid+'_alarm_report_'+today+'.txt')
 
+try:
+    with open(alarm_report_file,'w+') as f:
+        pass
+except FileNotFoundError:
+    print("文件不存在")
 #需要合并的文件
 alarm_file = os.path.join(basedir,'alarm_'+today+'_'+siteid+'.txt')
 report_file = os.path.join(basedir,'report_'+today+'_'+siteid+'.txt')
