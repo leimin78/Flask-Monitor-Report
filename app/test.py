@@ -7,6 +7,7 @@ from flask_migrate import Migrate,MigrateCommand
 from flask_login import LoginManager,login_user,login_required,logout_user,UserMixin
 from flask_script import Manager
 from get_server_info  import *
+from alarm_dict import alarmDict
 from werkzeug.security import generate_password_hash, check_password_hash
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -374,8 +375,10 @@ def siteAlarm(siteid):
     #获取局点告警信息列表
     db.query_db(site_alarm_sql.format(site_id=siteid))
     site_alarm_info = db.datas
+
+
     return render_template('site_alarm.html',site_name=site_name,
-                           site_alarm_info=site_alarm_info)
+                           site_alarm_info=site_alarm_info,alarmDict=alarmDict)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='192.168.100.39',port=80)

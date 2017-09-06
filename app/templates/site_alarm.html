@@ -24,21 +24,25 @@
                 <th>告警场景</th>
                 <th>首次告警时间</th>
                 <th>最近告警时间</th>
-                <th>是否发送告警邮件</th>
+                <th>是否需要发送告警邮件</th>
             </tr>
             {% for ai_node_name,ai_object_name,ai_scene_name,ai_time,ai_last_alarm_time,send_mail in site_alarm_info %}
             <tr>
                 <td>{{loop.index}}</td>
                 <td>{{ ai_node_name }}</td>
-                <td>{{ ai_object_name }}</td>
-                <td>{{ ai_scene_name }}</td>
+                <td>{{ alarmDict[ai_object_name] }}</td>
+                <td>{{ alarmDict[ai_scene_name] }}</td>
                 <td>{{ ai_time }}</td>
                 <td>{{ ai_last_alarm_time }}</td>
-                <td>{{ send_mail }}</td>
+                {% if send_mail=='0' %}
+                <td>否</td>
+                {% else %}
+                <td>是</td>
+                {% endif %}
             </tr>
             {% endfor %}
         </table>
-        <div class="signature" align="center">Powered by <font color="FFFF11F">LeiMin @ Python / Operation and maintenance department</font>
+        <div class="signature" align="center" >Powered by <font color="FFFF11F">LeiMin @ Python / Operation and maintenance department</font>
         </div>
     </body>
 </html>
