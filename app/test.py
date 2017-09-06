@@ -81,6 +81,20 @@ class SiteReport(db.Model):
     ds_num = db.Column(db.String(100),nullable=True)
     site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
 
+#局点告警列表,告警节点,告警对象,告警场景,首次告警时间,最近告警时间,告警级别,局点名
+
+class SiteAlarm(db.Model):
+    __tablename__ = 'site_alarm'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    ai_node_name = db.Column(db.String(100),nullable=True)
+    ai_object_name = db.Column(db.TEXT,nullable=True)
+    ai_scene_name = db.Column(db.TEXT,nullable=True)
+    ai_time = db.Column(db.String(14),nullable=True)
+    ai_last_alarm_time = db.Column(db.String(14),nullable=True)
+    ai_level = db.Column(db.String(10),nullable=True)
+    site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
+
+
 
 #系统状态表,cpu用户使用,cpu系统使用,cpu_io使用,cpu空闲,
 # 内存使用,内存剩余,内存buffer,内存总量

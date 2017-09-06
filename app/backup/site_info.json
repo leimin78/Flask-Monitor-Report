@@ -1,0 +1,26 @@
+[
+  {
+    "id" : "1",
+    "site_id" : "C10",
+    "site_url" : "http:\/\/mystatus.zong.com.pk",
+    "site_name" : "巴基斯坦CMPARK"
+  },
+  {
+    "id" : "2",
+    "site_id" : "C13",
+    "site_url" : "<null>",
+    "site_name" : "科威特Zain"
+  },
+  {
+    "id" : "3",
+    "site_id" : "C11",
+    "site_url" : "<null>",
+    "site_name" : "喀麦隆Orange"
+  },
+  {
+    "id" : "4",
+    "site_id" : "C12",
+    "site_url" : "<null>",
+    "site_name" : "阿根廷Personal"
+  }
+]

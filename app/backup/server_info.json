@@ -1,0 +1,68 @@
+[
+  {
+    "server_ip" : "192.168.0.35",
+    "id" : "1",
+    "server_name" : "SUSE-35",
+    "server_site_id" : "C10"
+  },
+  {
+    "server_ip" : "192.168.0.36",
+    "id" : "2",
+    "server_name" : "SUSE-36",
+    "server_site_id" : "C10"
+  },
+  {
+    "server_ip" : "192.168.0.37",
+    "id" : "3",
+    "server_name" : "SUSE-37",
+    "server_site_id" : "C10"
+  },
+  {
+    "server_ip" : "192.168.0.38",
+    "id" : "4",
+    "server_name" : "SUSE-38",
+    "server_site_id" : "C10"
+  },
+  {
+    "server_ip" : "192.168.0.10",
+    "id" : "5",
+    "server_name" : "SUSE-10",
+    "server_site_id" : "C11"
+  },
+  {
+    "server_ip" : "192.168.0.11",
+    "id" : "6",
+    "server_name" : "SUSE-11",
+    "server_site_id" : "C11"
+  },
+  {
+    "server_ip" : "192.168.0.12",
+    "id" : "7",
+    "server_name" : "SUSE-12",
+    "server_site_id" : "C12"
+  },
+  {
+    "server_ip" : "192.168.0.13",
+    "id" : "8",
+    "server_name" : "SUSE-13",
+    "server_site_id" : "C13"
+  },
+  {
+    "server_ip" : "192.168.0.14",
+    "id" : "9",
+    "server_name" : "SUSE-14",
+    "server_site_id" : "C13"
+  },
+  {
+    "server_ip" : "192.168.0.15",
+    "id" : "10",
+    "server_name" : "SUSE-15",
+    "server_site_id" : "C13"
+  },
+  {
+    "server_ip" : "192.168.0.16",
+    "id" : "11",
+    "server_name" : "SUSE-16",
+    "server_site_id" : "C13"
+  }
+]

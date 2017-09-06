@@ -12,7 +12,7 @@ IP_LIST = ['192.168.0.35','192.168.0.36','192.168.0.37','192.168.0.38','192.168.
 def setTimeList():
     #将时间转换成秒,默认时间为 20170904000000
     time_list = []
-    d = datetime.datetime.strptime('20170904000000', "%Y%m%d%H%M%S")
+    d = datetime.datetime.strptime('20170902000000', "%Y%m%d%H%M%S")
     s = time.mktime(d.timetuple())
     for i in range(1,86401,120):
         record_time = time.strftime("%Y%m%d%H%M%S",time.localtime(s))
