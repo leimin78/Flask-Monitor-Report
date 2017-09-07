@@ -34,18 +34,13 @@
 ### 增加服务器信息采集脚本
 ### 规划目录结构
 
-Flask-Monitor-Report/ </br>
-├── README.MD </br>
-├── app </br>
-│   ├── main </br>
-│   ├── static </br>
-│   └── templates </br>
-├── config.py </br>
-├── migrations </br>
-├── script_agent </br>
-│   ├── system_info.py </br>
-│   └── system_info_20170824.txt </br>
-└── tests </br>
+app 主程序目录
+mail 视图目录
+static 资源文件
+templates 模板目录
+alarm_dict 字典解析相关告警场景
+get_server_info 数据查询
+models 表结构定义
 
 
 ### 定义局点表，用户表，服务器表，系统信息表的模型
