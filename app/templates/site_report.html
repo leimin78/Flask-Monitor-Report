@@ -23,6 +23,9 @@
 </style>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ns_tb.css') }}">
 <body bgcolor="#333">
+<div class="lan_out" style="height:20px;width:100%; ">
+            <a href="{{url_for('main.logout')}}" class="out" style="float: right;color:#ffffff" >退出</a>
+</div>
 
 <div>
     <h4 align="center"><font color="FFFFFF">{{site_name}} 用户开销户数据</font></h4>

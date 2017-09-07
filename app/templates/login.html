@@ -27,7 +27,7 @@
 <div class="container">
     <div class="login">
         <div class="form_header">管理员 登录:</div>
-        <form role="form" action="{{ url_for('login') }}" method="post">
+        <form role="form" action="{{ url_for('main.login') }}" method="post">
             <input type="text" class="txt" id="uname"  name="uname" placeholder="用户名"/><br>
             <input type="password" class="txt" id="pass" name="pass" placeholder="密码"/><br>
             <input type="checkbox" class="chk" id="remember" value="remember" checked/>

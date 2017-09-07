@@ -6,7 +6,7 @@ import datetime
 week_time = datetime.datetime.now() - datetime.timedelta(days=7)
 new_week_time = week_time.strftime("%Y%m%d%H%M%S")
 
-DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/app/data.sqlite'
+DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/data.sqlite'
 
 ## 服务器相关语句
 site_info_sql = """ select site_id,site_name from site_info group by site_id,site_name """
@@ -40,7 +40,7 @@ mo_times_sql = """select pk_ds_day,ds_num from site_report where pk_ds_stat_type
 mt_times_sql = """select pk_ds_day,ds_num from site_report where pk_ds_stat_type='13008' and pk_ds_day >='{weektime}' and pk_ds_day < '{today}' and site_id='{site_id}' order by pk_ds_day"""
 
 #获取高告警信息
-site_alarm_sql = """select ai_node_name,ai_object_name,ai_scene_name,ai_time,ai_last_alarm_time,send_mail from site_alarm where site_id='{site_id}' """
+site_alarm_sql = """select ai_node_name,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail from site_alarm where site_id='{site_id}' """
 
 class queryDB:
     # 初始化查询连接

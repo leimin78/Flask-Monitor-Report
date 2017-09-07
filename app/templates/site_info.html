@@ -14,9 +14,12 @@
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/ns_tb.css') }}">
     <body bgcolor="#333" >
+        <div class="lan_out" style="height:20px;width:100%; ">
+            <a href="{{url_for('main.logout')}}" class="out" style="float: right;color:#ffffff" >退出</a>
+        </div>
         <h2 align="center"><font color="FFFFFF">CallShine 监控平台 局点列表</font></h2>
 
-        <table border="2" align="center" class="imagetable">
+        <table border="2" align="center" class="imagetable" style="width: 60%">
             <tr>
                 <th>序号</th>
                 <th>局点编号</th>
@@ -31,9 +34,9 @@
                 <!--主机名和IP字段-->
                 <td>{{ site_id }}</td>
                 <td>{{ site_name }}</td>
-                <td><a href="{{ url_for('siteAlarm',siteid=site_id,_external=True)}}">点击查看告警</a></td>
-                <td><a href="{{ url_for('siteReport',siteid=site_id,_external=True)}}">点击查看报表</a> </td>
-                <td><a href="{{ url_for('serverList',siteid= site_id,_external=True)}}">点击查看服务器信息</a></td>
+                <td><a href="{{ url_for('main.siteAlarm',siteid=site_id,_external=True)}}">点击查看告警</a></td>
+                <td><a href="{{ url_for('main.siteReport',siteid=site_id,_external=True)}}">点击查看报表</a> </td>
+                <td><a href="{{ url_for('main.serverList',siteid= site_id,_external=True)}}">点击查看服务器信息</a></td>
             </tr>
             {% endfor %}
         </table>
