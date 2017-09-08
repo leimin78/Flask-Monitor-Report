@@ -20,7 +20,7 @@ $report_sql
 EOF
 
 alarm_sql="select ai_node_name||'|'||ai_object_name||'|'||ai_scene_name||'|'||
-ai_time||'|'||ai_last_alarm_time||'|'||ai_level from com_alarm_info where ai_level='4' and ai_recover_time is null and ai_time>=$SEVEN_DAY_AGO_ALARM and ai_recover_time=' '
+ai_time||'|'||ai_last_alarm_time||'|'||ai_level from com_alarm_info where (ai_recover_time=' ' or ai_recover_time='')
 order by ai_time;"
 
 echo alarm_sql
