@@ -1,5 +1,6 @@
 import datetime
 import time
+import requests
 from flask import render_template,redirect,url_for,flash,request
 from flask_login import login_user,login_required,logout_user
 from . import main
@@ -7,6 +8,12 @@ from ..models import *
 from ..get_server_info import *
 from ..alarm_dict import alarmDict
 from .. import login_manager
+from ..insert_data import *
+
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -87,6 +94,7 @@ def serverDetail(serverip):
     #设置时间参数
     week_time = datetime.datetime.now() - datetime.timedelta(days=7)
     new_week_time = week_time.strftime("%Y%m%d%H%M%S")
+    print(new_week_time)
     #获取主机名
     db = queryDB()
     db.query_db(server_name_sql.format(ip=serverip))
@@ -109,11 +117,12 @@ def serverDetail(serverip):
     cpu_system = [x[1] for x in cpu_info_list]
     cpu_io = [x[2] for x in cpu_info_list]
     cpu_idle = [x[3] for x in cpu_info_list]
-    cpu_time = [x[4] for x in cpu_info_list]
+    cpu_time = [x[4].strip('\n') for x in cpu_info_list]
     new_cpu_time = []
     for cputime in cpu_time:
         local = time.mktime(time.strptime(cputime, "%Y%m%d%H%M%S"))
         new_cpu_time.append(time.strftime("%Y%m%d-%H:%M:%S",time.localtime(local)))
+
 
 
     #获取内存列表信息
@@ -247,3 +256,76 @@ def siteAlarm(siteid):
 
     return render_template('site_alarm.html',site_name=site_name,
                            site_alarm_info=site_alarm_info,alarmDict=alarmDict)
+
+
+##下载接口当访问局点信息是触发下载请求下载文件
+@main.route('/site_info/download/<siteid>',methods=["GET","POST"])
+@login_required
+def siteDownload(siteid):
+    #根据局点名获取文件下载地址
+    Today = datetime.datetime.now().strftime('%Y%m%d')
+    db = queryDB()
+    site_domain_new_sql = site_domain_sql.format(site_id=siteid)
+    db.query_db(site_domain_new_sql)
+    site_url = db.datas[0][0]
+
+    #定义需要下载的文件名及下载链接
+    site_alarm_filename = siteid+'_alarm_report_'+Today
+    site_sys_filename = siteid+'_sysinfo_'+Today
+    site_alarm_url = site_url+site_alarm_filename
+    site_sys_url = site_url+site_sys_filename
+
+    #定义下载目录
+    site_file_path = basedir+'/downloads/'+siteid
+
+    #目录不存在则创建
+    isExists = os.path.exists(site_file_path)
+    if not isExists:
+        os.makedirs(site_file_path)
+    else:
+        print("目录已存在不需要创建。")
+
+    #下载告警报表文件
+    alarm_req = requests.get(site_alarm_url, stream=True)
+    f = open(os.path.join(site_file_path,site_alarm_filename), "wb")
+    for chunk in alarm_req.iter_content(chunk_size=512):
+        if chunk:
+            f.write(chunk)
+
+    #下载服务器信息文件
+    sys_req = requests.get(site_sys_url,stream=True)
+    f = open(os.path.join(site_file_path, site_sys_filename), "wb")
+    for chunk in sys_req.iter_content(chunk_size=512):
+        if chunk:
+            f.write(chunk)
+
+    #将获取的文件插入数据库
+    SYS_TEXT = os.path.join(site_file_path,site_sys_filename)
+    ALARM_REPORT_TEXT=os.path.join(site_file_path,site_alarm_filename)
+
+    print(SYS_TEXT)
+    sys1 = parseText()
+    sys_insert = insertData()
+    alarm_insert = insertData()
+    server_insert = insertData()
+    # 插入服务器相关数据
+    try:
+        sys_insert.executesql(sys1.parseSysText(SYS_TEXT)[0], sys1.parseSysText(SYS_TEXT)[1])
+    except IndexError as e:
+        print(e.args)
+        print("服务器信息文件不存在本次不写入数据")
+
+    # 写入报表告警相关数据
+    try:
+        alarm_insert.executesql(sys1.parseAlarmReportText(ALARM_REPORT_TEXT)[0], sys1.parseAlarmReportText(ALARM_REPORT_TEXT)[1])
+    except IndexError as e:
+        print(e.args)
+        print("告警信息文件不存在本次不写入数据.")
+    try:
+        server_insert.executesql(sys1.parseSiteServer(SYS_TEXT)[0], sys1.parseSiteServer(SYS_TEXT)[1])
+    except IndexError as e:
+        print(e.args)
+        print("服务器文件不存在本次不写入数据.")
+
+
+    return "文件已下载"

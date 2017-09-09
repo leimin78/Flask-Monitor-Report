@@ -48,10 +48,10 @@ class parseText:
 
                     elif lis[3] == 'base':
                         base_sql = """ insert into sys_info('system_version','server_uptime','host_ip','record_time') values('%s','%s','%s','%s')""" \
-                                   % (lis[4], lis[5], lis[1], lis[-1].strip('\n'))
+                                   % (lis[4], lis[5], lis[1], lis[-1])
 
                         base_query_sql = """select * from sys_info where (system_version='%s' and server_uptime='%s' and host_ip='%s' and record_time='%s')""" \
-                                         % (lis[4], lis[5], lis[1], lis[-1].strip('\n'))
+                                         % (lis[4], lis[5], lis[1], lis[-1])
 
                         sql_list.append(base_sql)
                         query_list.append(base_query_sql)

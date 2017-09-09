@@ -42,6 +42,9 @@ mt_times_sql = """select pk_ds_day,ds_num from site_report where pk_ds_stat_type
 #获取高告警信息
 site_alarm_sql = """select ai_node_name,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail from site_alarm where site_id='{site_id}' """
 
+#获取局点域名
+site_domain_sql = """select site_url from site_info where site_id='{site_id}'"""
+
 class queryDB:
     # 初始化查询连接
     def __init__(self):
