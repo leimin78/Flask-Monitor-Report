@@ -40,6 +40,26 @@
             </tr>
             {% endfor %}
         </table>
+        <h2 align="center"><font color="FFFFFF">CallShine 维护人员列表</font></h2>
+        <table border="2" align="center" class="imagetable" style="width: 60%">
+            <tr>
+                <th>序号</th>
+                <th>姓名</th>
+                <th>电话</th>
+                <th>邮件</th>
+                <th>所负责据点</th>
+            </tr>
+            {% for sys_name,sys_phone,sys_mail,sys_site in sys_user_info %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <!--主机名和IP字段-->
+                <td>{{sys_name}}</td>
+                <td>{{sys_phone}}</td>
+                <td>{{sys_mail}}</td>
+                <td>{{sys_site}}</td>
+            </tr>
+            {% endfor %}
+        </table>
         <div class="signature" align="center">Powered by <font color="FFFF11F">LeiMin @ Python / Operation and maintenance department</font>
         </div>
     </body>

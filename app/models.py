@@ -25,6 +25,10 @@ class UserInfo(UserMixin,db.Model):
     #一个用户可以管理多个局点
     user_site_id = db.Column(db.String(100))
 
+    #新增用户姓名，电话号码字段
+    user_cname  = db.Column(db.String(100))
+    user_phone = db.Column(db.String(100))
+
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')

@@ -46,7 +46,7 @@
                 <td>
                     {% for mem_use in mem_use_list %}
                         {% if mem_use[-1] == server_ip %}
-                            {{ mem_use[1]*100 }}%
+                            {{ mem_use[1]}}%
                         {% endif %}
                     {% endfor %}
                 </td>

@@ -3,7 +3,8 @@ import time
 import datetime
 #分析文本数据写入sqlite数据库
 
-DB_FILE = '/Users/leimin/flask_project/Flask-Monitor-Report/data.sqlite'
+from config import config
+DB_FILE = config['development'].DATABASE_URI
 
 class parseText:
     #解析系统文本文件，生成入库脚本

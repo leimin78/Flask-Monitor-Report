@@ -32,7 +32,7 @@
         <td>{{ sys_info[0][1] }}</td>
         <td>{{ sys_info[0][2] }}</td>
         <td>{{ sys_info[0][3] }}</td>
-        <td>{{ sys_info[0][4] }}</td>
+        <td>{{ sys_info[0][4][:4] }}/{{sys_info[0][4][4:6]}}/{{sys_info[0][4][6:8]}} {{sys_info[0][4][8:10]}}:{{sys_info[0][4][10:12]}}:{{sys_info[0][4][12:14]}}</td>
     </tr>
 </table>
 
@@ -69,7 +69,7 @@
 </script>
 
 <!-- 为cpu-ECharts准备一个具备大小（宽高）的Dom -->
-<div id="cpu" align="left" style="width: 1250px;height:250px;"></div>
+<div id="cpu" align="center" style="width: 85%;height:250px;"></div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChartCpu = echarts.init(document.getElementById('cpu'), 'dark');
@@ -164,7 +164,7 @@
 </script>
 
 <!-- 为cpu-ECharts准备一个具备大小（宽高）的Dom -->
-<div id="mem" align="left" style="width: 1250px;height:250px;"></div>
+<div id="mem" align="center" style="width: 85%;height:250px;"></div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChartMem = echarts.init(document.getElementById('mem'), 'dark');

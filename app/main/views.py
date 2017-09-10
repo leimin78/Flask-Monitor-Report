@@ -56,7 +56,11 @@ def siteInfo():
     db = queryDB()
     db.query_db(site_info_sql)
     site_info = db.datas
-    return render_template('site_info.html',site_info=site_info)
+
+    #获取维护人员信息
+    db.query_db(sys_user_sql)
+    sys_user_info = db.datas
+    return render_template('site_info.html',site_info=site_info,sys_user_info=sys_user_info)
 
 
 #局点基本信息页面
@@ -169,59 +173,59 @@ def siteReport(siteid):
     #获取开户数
     db.query_db(sub_user_sql.format(weektime=new_week_time,site_id=siteid,today=today))
     sub_user_list = db.datas
-    sub_user = [ int(x[1]) for x in sub_user_list ]
-    day_time = [ int(x[0]) for x in sub_user_list ]
+    sub_user = [ int(x[2]) for x in sub_user_list ]
+    day_time = [ int(x[1]) for x in sub_user_list ]
 
     #获取销户数
     db.query_db(unsub_user_sql.format(weektime=new_week_time,site_id=siteid,today=today))
     unsub_user_list = db.datas
-    unsub_user = [ int(x[1]) for x in unsub_user_list ]
+    unsub_user = [ int(x[2]) for x in unsub_user_list ]
 
     #获取总用户数
     db.query_db(total_user_sql.format(weektime=new_week_time,site_id=siteid,today=today))
     total_user_list = db.datas
-    total_user = [ int(x[1]) for x in total_user_list ]
+    total_user = [ int(x[2]) for x in total_user_list ]
 
     #获取收费用户数
     db.query_db(charge_user_sql.format(weektime=new_week_time, site_id=siteid,today=today))
     charge_user_list = db.datas
-    charge_user = [ int(x[1]) for x in charge_user_list ]
+    charge_user = [ int(x[2]) for x in charge_user_list ]
 
 
     #呼叫次数
     db.query_db(call_times_sql.format(weektime=new_week_time,site_id=siteid,today=today))
     call_times_list = db.datas
-    call_times = [ int(x[1]) for x in call_times_list ]
+    call_times = [ int(x[2]) for x in call_times_list ]
 
     #USSD发送次数
     db.query_db(ussd_times_sql.format(weektime=new_week_time,site_id=siteid,today=today))
     ussd_times_list = db.datas
-    ussd_times = [ int(x[1]) for x in ussd_times_list ]
+    ussd_times = [ int(x[2]) for x in ussd_times_list ]
 
     #USSD发送成功数
     db.query_db(ussd_sucess_sql.format(weektime=new_week_time, site_id=siteid,today=today))
     ussd_sucess_list = db.datas
-    ussd_sucess = [ int(x[1]) for x in ussd_sucess_list ]
+    ussd_sucess = [ int(x[2]) for x in ussd_sucess_list ]
 
     #闪信发送次数
     db.query_db(flash_times_sql.format(weektime=new_week_time, site_id=siteid,today=today))
     flash_times_list = db.datas
-    flash_times = [ int(x[1]) for x in flash_times_list ]
+    flash_times = [ int(x[2]) for x in flash_times_list ]
 
     #闪信发送成功数
     db.query_db(flash_sucess_sql.format(weektime=new_week_time, site_id=siteid,today=today))
     flash_sucess_list = db.datas
-    flash_sucess = [ int(x[1]) for x in flash_sucess_list ]
+    flash_sucess = [ int(x[2]) for x in flash_sucess_list ]
 
     #短信上行次数
     db.query_db(mo_times_sql.format(weektime=new_week_time, site_id=siteid,today=today))
     mo_times_list = db.datas
-    mo_times = [ int(x[1]) for x in mo_times_list ]
+    mo_times = [ int(x[2]) for x in mo_times_list ]
 
     #短信下行次数
     db.query_db(mt_times_sql.format(weektime=new_week_time, site_id=siteid, today=today))
     mt_times_list = db.datas
-    mt_times = [int(x[1]) for x in mt_times_list]
+    mt_times = [int(x[2]) for x in mt_times_list]
 
     return render_template('site_report.html',
                            site_name=site_name,
@@ -260,7 +264,6 @@ def siteAlarm(siteid):
 
 ##下载接口当访问局点信息是触发下载请求下载文件
 @main.route('/site_info/download/<siteid>',methods=["GET","POST"])
-@login_required
 def siteDownload(siteid):
     #根据局点名获取文件下载地址
     Today = datetime.datetime.now().strftime('%Y%m%d')
