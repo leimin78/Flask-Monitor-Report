@@ -86,7 +86,7 @@ def serverList(siteid):
     #获取最近内存使用率
     db.query_db(mem_use_sql)
     mem_use_list = db.datas
-
+    print(mem_use_list)
     return render_template('server_info.html',server_list=server_list,site_name=site_name,cpu_use_list=cpu_use_list,
                            mem_use_list=mem_use_list)
 
