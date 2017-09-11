@@ -4,7 +4,7 @@
 import requests
 import datetime
 site_list = ['C10']
-base_url = 'http://127.0.0.1:5000/site_info/download/'
+base_url = 'http://127.0.0.1:80/site_info/download/'
 
 if __name__ == '__main__':
     for site in site_list:
