@@ -56,6 +56,16 @@ class parseText:
                         sql_list.append(base_sql)
                         query_list.append(base_query_sql)
 
+                    elif lis[3] == 'run':
+                        run_sql = """ insert into sys_info('run_node_name','host_ip','record_time') values('%s','%s','%s')"""\
+                        %(lis[4],lis[1],lis[-1].strip('\n'))
+
+                        run_query_sql = """select * from sys_info where (run_node_name='%s' and host_ip='%s' and record_time='%s')"""\
+                        %(lis[4],lis[1],lis[-1].strip('\n'))
+
+                        sql_list.append(run_sql)
+                        query_list.append(run_query_sql)
+
                     else:
                         pass
             result_list.append(sql_list)

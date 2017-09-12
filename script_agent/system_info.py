@@ -40,12 +40,31 @@ class getSystemInfo():
 
     # 获系统基本信息
     """server_name|server_ip|site_id|base|system_version|server_uptime|record_time"""
-
     def getBaseInfo(self):
         record_time = time.strftime("%Y%m%d%H%M%S", time.localtime())
         with open(self.file_name, 'a') as f:
             line = server_name + '|' + server_ip + '|' + site_id + '|' + 'base' + '|' + system_version + '|' + server_uptime + '|' + record_time + '\n'
             f.write(line)
+
+    #获取系统运行节点
+    """server_name|server_ip|site_id|run|node_name|record_time"""
+    def getRunNode(self):
+        java_run_list = ['amp','trp','sam','sim','fdm','aep','euip','ocm']
+        other_run_list = ['scm','sdm','spm','oracle']
+        record_time = time.strftime("%Y%m%d%H%M%S", time.localtime())
+        for run_name in java_run_list:
+            cmd = subprocess.Popen("""lsof|grep java|grep """+run_name,shell=True,stdout=subprocess.PIPE)
+            if len(cmd.stdout.readlines()) > 2:
+                with open(self.file_name,'a') as f:
+                    line = server_name + '|' + server_ip + '|' + site_id + '|' +'run' + '|' + run_name + '|' + record_time + '\n'
+                    f.write(line)
+
+        for run_name in other_run_list:
+            cmd = subprocess.Popen("""lsof|grep """ + run_name, shell=True, stdout=subprocess.PIPE)
+            if len(cmd.stdout.readlines()) > 2:
+                with open(self.file_name, 'a') as f:
+                    line = server_name + '|' + server_ip + '|' + site_id + '|' + 'run' + '|' + run_name + '|' + record_time + '\n'
+                    f.write(line)
 
     # 获取cpu信息,并写入文件
     """Cpu(s):  1.4%us,  0.4%sy,  0.0%ni, 97.9%id,  0.3%wa,  0.0%hi,  0.0%si,  0.0%st"""
@@ -106,6 +125,7 @@ class getSystemInfo():
 
 if __name__ == '__main__':
     sysinfo = getSystemInfo()
+    sysinfo.getRunNode()
     sysinfo.getBaseInfo()
     sysinfo.getCpuInfo()
     sysinfo.getMeminfo()

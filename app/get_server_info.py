@@ -8,7 +8,6 @@ week_time = datetime.datetime.now() - datetime.timedelta(days=7)
 new_week_time = week_time.strftime("%Y%m%d%H%M%S")
 
 DB_FILE = config['development'].DATABASE_URI
-print(DB_FILE)
 
 ## 服务器相关语句
 site_info_sql = """ select site_id,site_name from site_info group by site_id,site_name """
@@ -21,6 +20,7 @@ system_info_sql = """select max(rowid),host_ip,system_version,server_uptime,reco
 disk_info_sql = """select max(rowid),lun_name,lun_use,lun_size,lun_rate from sys_info where lun_name is not null and host_ip='{ip}' group by lun_name"""
 cpu_info_list_sql = """select user_use,sys_use,io_use,idle_use,record_time from sys_info where user_use is not null and host_ip='{ip}' and record_time>='{weektime}' order by record_time """
 mem_info_list_sql = """select round(1-(mem_free+mem_buffer)/mem_total,2)*100,record_time from sys_info where mem_free is not null and host_ip='{ip}' and record_time>='{weektime}' order by record_time """
+run_node_list_sql = """select max(id),run_node_name,host_ip from sys_info where run_node_name is not null group by run_node_name,host_ip """
 
 ##报表相关语句
 #开销户数
@@ -42,7 +42,7 @@ mo_times_sql = """select max(id),pk_ds_day,ds_num from site_report where pk_ds_s
 mt_times_sql = """select max(id),pk_ds_day,ds_num from site_report where pk_ds_stat_type='13008' and pk_ds_day >='{weektime}' and pk_ds_day < '{today}' and site_id='{site_id}' group by pk_ds_day,pk_ds_day order by pk_ds_day"""
 
 #获取高告警信息
-site_alarm_sql = """select max(id),ai_node_name,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail from site_alarm where site_id='{site_id}' group by ai_node_name,ai_object_name,ai_level,ai_scene_name,ai_time"""
+site_alarm_sql = """select max(id),ai_node_name,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail from site_alarm where site_id='{site_id}' group by ai_node_name,ai_object_name,ai_level,ai_scene_name"""
 
 #获取局点域名
 site_domain_sql = """select site_url from site_info where site_id='{site_id}'"""

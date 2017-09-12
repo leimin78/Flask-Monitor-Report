@@ -93,7 +93,7 @@
     myChartUser.setOption(option);
 </script>
 
-<div id="total_userinfo" align="center" style="width: 85%px;height:250px;"></div>
+<div id="total_userinfo" align="center" style="width: 85%;height:250px;"></div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
     var myChartTotalUser = echarts.init(document.getElementById('total_userinfo'), 'dark');
@@ -141,13 +141,11 @@
         {
             name:'收费户数',
             type:'bar',
-            barWidth: '30%',
             data:{{charge_user}}
         },
     {
             name:'总用户数',
             type:'bar',
-            barWidth: '30%',
             data:{{total_user}}
         }
     ]

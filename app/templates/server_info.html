@@ -24,6 +24,7 @@
                 <th>序号</th>
                 <th>局点编号</th>
                 <th>服务器名</th>
+                <th>服务器运行模块</th>
                 <th>服务器IP</th>
                 <th>服务器CPU</th>
                 <th>服务器内存</th>
@@ -35,6 +36,13 @@
                 <!--主机名和IP字段-->
                 <td>{{ site_id }}</td>
                 <td>{{ server_name }}</td>
+                <td>
+                    {% for run_node in run_node_list %}
+                     {% if run_node[-1] == server_ip %}
+                      {{run_node[1]}}
+                    {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ server_ip }}</td>
                 <td>
                     {% for cpu_use in cpu_use_list %}

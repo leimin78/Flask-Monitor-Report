@@ -100,5 +100,7 @@ class SysInfo(db.Model):
     system_version = db.Column(db.String(128),nullable=True)
     server_uptime = db.Column(db.String(128),nullable=True)
 
+    run_node_name = db.Column(db.String(128),nullable=True)
+
     record_time = db.Column(db.String(14))
     host_ip = db.Column(db.String(30),db.ForeignKey('server_info.server_ip'))

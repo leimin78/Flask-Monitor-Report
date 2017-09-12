@@ -26,6 +26,8 @@ def index():
 
 @main.route('/login',methods=["GET","POST"])
 def login():
+    #进入首页时对用户session进行清除
+    logout_user()
     if request.method == "POST":
         uname = request.form.get('uname')
         print(uname)
@@ -83,12 +85,16 @@ def serverList(siteid):
     db.query_db(cpu_use_sql)
     cpu_use_list = db.datas
 
+    #获取运行节点
+    db.query_db(run_node_list_sql)
+    run_node_list = db.datas
+
     #获取最近内存使用率
     db.query_db(mem_use_sql)
     mem_use_list = db.datas
     print(mem_use_list)
     return render_template('server_info.html',server_list=server_list,site_name=site_name,cpu_use_list=cpu_use_list,
-                           mem_use_list=mem_use_list)
+                           mem_use_list=mem_use_list,run_node_list=run_node_list)
 
 #服务器详细细信息页面
 @main.route('/server_detail/<serverip>',methods=['GET','POST'])
