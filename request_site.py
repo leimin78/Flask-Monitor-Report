@@ -12,8 +12,8 @@ from app.alarm_dict import alarmDict
 
 DB_FILE = config['development'].DATABASE_URI
 
-site_list = ['C18','C10','C06']
-base_url = 'http://127.0.0.1:80/site_info/download/'
+site_list = ['C26','C18','C10','C06']
+base_url = 'http://127.0.0.1:5000/site_info/download/'
 
 class initDb:
     def __init__(self):

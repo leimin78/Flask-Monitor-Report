@@ -147,14 +147,17 @@ class insertData:
 
     #执行相关脚本
     def executesql(self,sql_list,query_list):
-        for index,query_sql in enumerate(query_list):
-            #如果存在相同数据则不写入
+        for index, query_sql in enumerate(query_list):
+            # 如果存在相同数据则不写入
             if self.cur.execute(query_sql).fetchall():
-                print("存在相同数据不写入")
+                pass
+            # print("存在相同数据不写入")
             else:
-                print("第{i}行数据正在写入".format(i=index))
-                self.cur.execute(sql_list[index])
-                self.conn.commit()
+                try:
+                    self.cur.execute(sql_list[index])
+                    self.conn.commit()
+                except Exception:
+                    continue
 
     #析构,关闭链接
     def __del__(self):

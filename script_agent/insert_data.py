@@ -112,7 +112,8 @@ class insertData:
         for index,query_sql in enumerate(query_list):
             #如果存在相同数据则不写入
             if self.cur.execute(query_sql).fetchall():
-                print("存在相同数据不写入")
+                pass
+                #print("{i}行存在相同数据不写入".format(i=index))
             else:
                 print("第{i}行数据正在写入".format(i=index))
                 self.cur.execute(sql_list[index])

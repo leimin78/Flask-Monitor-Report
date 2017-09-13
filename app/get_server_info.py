@@ -22,7 +22,9 @@ cpu_info_list_sql = """select user_use,sys_use,io_use,idle_use,record_time from 
 mem_info_list_sql = """select round(1-(mem_free+mem_buffer)/mem_total,2)*100,record_time from sys_info where mem_free is not null and host_ip='{ip}' and record_time>='{weektime}' order by record_time """
 run_node_list_sql = """select max(id),run_node_name,host_ip from sys_info where run_node_name is not null group by run_node_name,host_ip """
 
-##报表相关语句
+#查询各IP最新的时间
+ip_maxtime_sql = """select max(id),record_time,host_ip from sys_info where run_node_name is not null group by host_ip"""
+
 #开销户数
 sub_user_sql = """select max(id),pk_ds_day,ds_num from site_report where pk_ds_stat_type='13001' and pk_ds_day >='{weektime}' and pk_ds_day < '{today}' and site_id='{site_id}' group by pk_ds_day,pk_ds_day order by pk_ds_day"""
 unsub_user_sql = """select max(id),pk_ds_day,ds_num from site_report where pk_ds_stat_type='13002' and pk_ds_day >='{weektime}' and pk_ds_day < '{today}' and site_id='{site_id}' group by pk_ds_day,pk_ds_day order by pk_ds_day"""
@@ -59,6 +61,10 @@ class queryDB:
 
     def query_db(self, query):
         self.datas = self.cur.execute(query).fetchall()
+
+    def delete_db(self,delsql):
+        self.cur.execute(delsql)
+        self.conn.commit()
 
     def __del__(self):
         self.conn.close()

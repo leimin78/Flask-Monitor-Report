@@ -70,6 +70,7 @@ def siteInfo():
 @login_required
 def serverList(siteid):
     db = queryDB()
+    max_time = []
     site_server_sql = server_list_sql.format(site_id=siteid)
     site_name_new_sql = site_name_sql.format(site_id=siteid)
 
@@ -85,6 +86,14 @@ def serverList(siteid):
     db.query_db(cpu_use_sql)
     cpu_use_list = db.datas
 
+    #删除运行节点老数据只保留最新数据
+    db.query_db(ip_maxtime_sql)
+    ip_maxtime_list = db.datas
+    del_old_sql = "delete from sys_info where run_node_name is not null and record_time<'{max_time}' and host_ip='{host_ip}'"
+    for id,maxtime,ip in ip_maxtime_list:
+        new_del_old_sql = del_old_sql.format(max_time=maxtime,host_ip=ip)
+        db.delete_db(new_del_old_sql)
+
     #获取运行节点
     db.query_db(run_node_list_sql)
     run_node_list = db.datas
@@ -92,7 +101,6 @@ def serverList(siteid):
     #获取最近内存使用率
     db.query_db(mem_use_sql)
     mem_use_list = db.datas
-    print(mem_use_list)
     return render_template('server_info.html',server_list=server_list,site_name=site_name,cpu_use_list=cpu_use_list,
                            mem_use_list=mem_use_list,run_node_list=run_node_list)
 
@@ -104,7 +112,6 @@ def serverDetail(serverip):
     #设置时间参数
     week_time = datetime.datetime.now() - datetime.timedelta(days=7)
     new_week_time = week_time.strftime("%Y%m%d%H%M%S")
-    print(new_week_time)
     #获取主机名
     db = queryDB()
     db.query_db(server_name_sql.format(ip=serverip))
@@ -119,7 +126,6 @@ def serverDetail(serverip):
     disk_info = db.datas
 
     #获取cpu列表信息
-    print(cpu_info_list_sql.format(ip=serverip,weektime=new_week_time))
     db.query_db(cpu_info_list_sql.format(ip=serverip,weektime=new_week_time))
     cpu_info_list = db.datas
 
