@@ -18,8 +18,14 @@ class DevelopmentConfig(Config):
     DATABASE_URI = os.path.join(basedir, 'data.sqlite')
 
 
+class TestConfig(Config):
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = """mysql://root@localhost/test"""
+
+
 config = {
-'development': DevelopmentConfig
+'development': DevelopmentConfig,
+'testdb':TestConfig
 }
 
 

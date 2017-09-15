@@ -5,7 +5,7 @@ from flask import render_template,redirect,url_for,flash,request
 from flask_login import login_user,login_required,logout_user
 from . import main
 from ..models import *
-from ..get_server_info import *
+from ..get_server_info_mysql import *
 from ..alarm_dict import alarmDict
 from .. import login_manager
 from ..insert_data import *
@@ -265,10 +265,15 @@ def siteAlarm(siteid):
     db.query_db(site_name_new_sql)
     site_name = db.datas[0][0]
 
+    #如果告警最近告警时间超过2天则认为告警恢复数据清楚
+    two_days = datetime.datetime.now() - datetime.timedelta(days=2)
+    new_two_days = two_days.strftime("%Y%m%d%H%M%S")
+
+    db.delete_db(delete_alarm_sql.format(site_id=siteid,two_days=new_two_days))
+
     #获取局点告警信息列表
     db.query_db(site_alarm_sql.format(site_id=siteid))
     site_alarm_info = db.datas
-
 
     return render_template('site_alarm.html',site_name=site_name,
                            site_alarm_info=site_alarm_info,alarmDict=alarmDict)
@@ -308,6 +313,7 @@ def siteDownload(siteid):
             f.write(chunk)
 
     #下载服务器信息文件
+
     sys_req = requests.get(site_sys_url,stream=True)
     f = open(os.path.join(site_file_path, site_sys_filename), "wb")
     for chunk in sys_req.iter_content(chunk_size=512):
@@ -320,9 +326,9 @@ def siteDownload(siteid):
 
     print(SYS_TEXT)
     sys1 = parseText()
-    sys_insert = insertData()
-    alarm_insert = insertData()
-    server_insert = insertData()
+    sys_insert = insertDataMysql()
+    alarm_insert = insertDataMysql()
+    server_insert = insertDataMysql()
     # 插入服务器相关数据
     try:
         sys_insert.executesql(sys1.parseSysText(SYS_TEXT)[0], sys1.parseSysText(SYS_TEXT)[1])
@@ -341,6 +347,5 @@ def siteDownload(siteid):
     except IndexError as e:
         print(e.args)
         print("服务器文件不存在本次不写入数据.")
-
 
     return "文件已下载"

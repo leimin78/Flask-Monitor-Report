@@ -47,7 +47,7 @@ class ServerInfo(db.Model):
 
     server_name = db.Column(db.String(100),unique=True)
     server_ip = db.Column(db.String(30),unique=True)
-    server_site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
+    server_site_id = db.Column(db.String(10))
 
 #局点维护报表,局点名,日期,数据类型,数据
 class SiteReport(db.Model):
@@ -57,7 +57,7 @@ class SiteReport(db.Model):
     pk_ds_day = db.Column(db.String(14),nullable=True)
     pk_ds_stat_type = db.Column(db.String(14),nullable=True)
     ds_num = db.Column(db.String(100),nullable=True)
-    site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
+    site_id = db.Column(db.String(10))
 
 #局点告警列表,告警节点,告警对象,告警场景,首次告警时间,最近告警时间,告警级别,局点名
 
@@ -70,7 +70,8 @@ class SiteAlarm(db.Model):
     ai_time = db.Column(db.String(14),nullable=True)
     ai_last_alarm_time = db.Column(db.String(14),nullable=True)
     ai_level = db.Column(db.String(10),nullable=True)
-    site_id = db.Column(db.String(10),db.ForeignKey('site_info.site_id'))
+    site_id = db.Column(db.String(10))
+    send_mail = db.Column(db.String(128),default=0)
 
 
 
@@ -93,9 +94,9 @@ class SysInfo(db.Model):
     mem_total = db.Column(db.Float,nullable=True)
 
     lun_name = db.Column(db.String(10),nullable=True)
-    lun_use = db.Column(db.Float,nullable=True)
-    lun_size = db.Column(db.Float,nullable=True)
-    lun_rate = db.Column(db.Float, nullable=True)
+    lun_use = db.Column(db.String(10),nullable=True)
+    lun_size = db.Column(db.String(10),nullable=True)
+    lun_rate = db.Column(db.String(10), nullable=True)
 
     system_version = db.Column(db.String(128),nullable=True)
     server_uptime = db.Column(db.String(128),nullable=True)
@@ -103,4 +104,4 @@ class SysInfo(db.Model):
     run_node_name = db.Column(db.String(128),nullable=True)
 
     record_time = db.Column(db.String(14))
-    host_ip = db.Column(db.String(30),db.ForeignKey('server_info.server_ip'))
+    host_ip = db.Column(db.String(30))

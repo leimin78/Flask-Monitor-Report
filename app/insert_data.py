@@ -1,4 +1,5 @@
 import sqlite3
+import pymysql
 import time
 import datetime
 #分析文本数据写入sqlite数据库
@@ -19,7 +20,7 @@ class parseText:
                 for lis in lists:
                     if lis[3] == 'cpu':
                         print(lis)
-                        cpu_sql = """ insert into sys_info('user_use','sys_use','io_use','idle_use','host_ip','record_time') values ('%s','%s','%s','%s','%s','%s')""" \
+                        cpu_sql = """ insert into sys_info(user_use,sys_use,io_use,idle_use,host_ip,record_time) values ('%s','%s','%s','%s','%s','%s')""" \
                                   % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
                         cpu_query_sql = """ select * from sys_info where (user_use='%s' and sys_use='%s' and io_use='%s' and idle_use='%s' and host_ip='%s' and record_time='%s')""" \
@@ -28,7 +29,7 @@ class parseText:
                         query_list.append(cpu_query_sql)
 
                     elif lis[3] == 'mem':
-                        mem_sql = """ insert into sys_info('mem_use','mem_free','mem_buffer','mem_total','host_ip','record_time') values ('%s','%s','%s','%s','%s','%s')""" \
+                        mem_sql = """ insert into sys_info(mem_use,mem_free,mem_buffer,mem_total,host_ip,record_time) values ('%s','%s','%s','%s','%s','%s')""" \
                                   % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
                         mem_qury_sql = """ select * from sys_info where (mem_use='%s' and mem_free='%s' and mem_buffer='%s' and mem_total='%s' and host_ip = '%s' and record_time='%s')""" \
@@ -37,7 +38,7 @@ class parseText:
                         query_list.append(mem_qury_sql)
 
                     elif lis[3] == 'disk':
-                        disk_sql = """ insert into sys_info('lun_name','lun_use','lun_size','lun_rate','host_ip','record_time') values ('%s','%s','%s','%s','%s','%s')""" \
+                        disk_sql = """ insert into sys_info(lun_name,lun_use,lun_size,lun_rate,host_ip,record_time) values ('%s','%s','%s','%s','%s','%s')""" \
                                    % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
                         disk_query_sql = """ select * from sys_info where(lun_name='%s' and lun_use='%s' and lun_size='%s' and lun_rate='%s' and host_ip='%s' and record_time='%s') """ \
@@ -47,7 +48,7 @@ class parseText:
                         query_list.append(disk_query_sql)
 
                     elif lis[3] == 'base':
-                        base_sql = """ insert into sys_info('system_version','server_uptime','host_ip','record_time') values('%s','%s','%s','%s')""" \
+                        base_sql = """ insert into sys_info(system_version,server_uptime,host_ip,record_time) values('%s','%s','%s','%s')""" \
                                    % (lis[4], lis[5], lis[1], lis[-1].strip('\n'))
 
                         base_query_sql = """select * from sys_info where (system_version='%s' and server_uptime='%s' and host_ip='%s' and record_time='%s')""" \
@@ -57,7 +58,7 @@ class parseText:
                         query_list.append(base_query_sql)
 
                     elif lis[3] == 'run':
-                        run_sql = """ insert into sys_info('run_node_name','host_ip','record_time') values('%s','%s','%s')"""\
+                        run_sql = """ insert into sys_info(run_node_name,host_ip,record_time) values('%s','%s','%s')"""\
                         %(lis[4],lis[1],lis[-1].strip('\n'))
 
                         run_query_sql = """select * from sys_info where (run_node_name='%s' and host_ip='%s' and record_time='%s')"""\
@@ -95,7 +96,7 @@ class parseText:
                         query_list.append(report_query_sql)
 
                     elif lis[1] == 'alarm':
-                        alarm_sql = """ insert into site_alarm(ai_node_name,ai_object_name,ai_scene_name,ai_time,ai_last_alarm_time,ai_level,site_id) values('%s','%s','%s','%s','%s','%s','%s')"""\
+                        alarm_sql = """ insert into site_alarm(ai_node_name,ai_object_name,ai_scene_name,ai_time,ai_last_alarm_time,ai_level,site_id,send_mail) values('%s','%s','%s','%s','%s','%s','%s','0')"""\
                         %(lis[2],lis[3],lis[4],lis[5],lis[6],lis[7].strip('\n'),lis[0])
 
                         alarm_query_sql = """select * from site_alarm where(ai_node_name='%s' and ai_object_name='%s' and ai_scene_name='%s' and ai_time='%s' and ai_last_alarm_time='%s' and ai_level='%s' and site_id='%s' )""" \
@@ -154,6 +155,27 @@ class insertData:
             # print("存在相同数据不写入")
             else:
                 try:
+                    self.cur.execute(sql_list[index])
+                    self.conn.commit()
+                except Exception:
+                    continue
+
+
+class insertDataMysql:
+    #初始化数据连接定义游标
+    def __init__(self):
+        self.start_time = datetime.datetime.now()
+        self.conn = pymysql.connect('localhost', 'root', '', 'test')
+        print("数据库链接初始化..数据写入中.")
+        self.cur = self.conn.cursor()
+
+    def executesql(self,sql_list,query_list):
+        for index, query_sql in enumerate(query_list):
+            if self.cur.execute(query_sql)!=0:
+                print("存在相同数据不写入")
+            else:
+                try:
+                    print("正在执行语句"+sql_list[index])
                     self.cur.execute(sql_list[index])
                     self.conn.commit()
                 except Exception:

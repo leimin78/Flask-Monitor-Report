@@ -46,6 +46,8 @@ mt_times_sql = """select max(id),pk_ds_day,ds_num from site_report where pk_ds_s
 #获取高告警信息
 site_alarm_sql = """select max(id),ai_node_name,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail from site_alarm where site_id='{site_id}' group by ai_node_name,ai_object_name,ai_level,ai_scene_name"""
 
+#删除告警信息
+delete_alarm_sql = """delete from site_alarm where ai_last_alarm_time is not null and site_id='{site_id}' and ai_last_alarm_time<='{two_days}' """
 #获取局点域名
 site_domain_sql = """select site_url from site_info where site_id='{site_id}'"""
 
