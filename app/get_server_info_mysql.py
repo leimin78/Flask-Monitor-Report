@@ -54,7 +54,7 @@ class queryDB:
     # 初始化查询连接
     def __init__(self):
         self.start_time = datetime.datetime.now()
-        self.conn = pymysql.connect('localhost', 'root', '', 'test',charset='utf8')
+        self.conn = pymysql.connect('localhost', 'root', '123456', 'csmonitor',charset='utf8')
         self.cur = self.conn.cursor()
 
     def query_db(self, query):

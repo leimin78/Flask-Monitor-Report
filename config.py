@@ -19,8 +19,8 @@ class DevelopmentConfig(Config):
 
 
 class TestConfig(Config):
-    DEBUG = True
-    SQLALCHEMY_DATABASE_URI = """mysql://root@localhost/test"""
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = """mysql://root:123456@localhost/csmonitor"""
 
 
 config = {

@@ -165,7 +165,7 @@ class insertDataMysql:
     #初始化数据连接定义游标
     def __init__(self):
         self.start_time = datetime.datetime.now()
-        self.conn = pymysql.connect('localhost', 'root', '', 'test')
+        self.conn = pymysql.connect('localhost', 'root', '123456', 'csmonitor')
         print("数据库链接初始化..数据写入中.")
         self.cur = self.conn.cursor()
 
