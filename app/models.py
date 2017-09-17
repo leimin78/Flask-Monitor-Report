@@ -93,10 +93,10 @@ class SysInfo(db.Model):
     mem_buffer = db.Column(db.Float,nullable=True)
     mem_total = db.Column(db.Float,nullable=True)
 
-    lun_name = db.Column(db.String(10),nullable=True)
-    lun_use = db.Column(db.String(10),nullable=True)
-    lun_size = db.Column(db.String(10),nullable=True)
-    lun_rate = db.Column(db.String(10), nullable=True)
+    lun_name = db.Column(db.String(20),nullable=True)
+    lun_use = db.Column(db.String(20),nullable=True)
+    lun_size = db.Column(db.String(20),nullable=True)
+    lun_rate = db.Column(db.String(20), nullable=True)
 
     system_version = db.Column(db.String(128),nullable=True)
     server_uptime = db.Column(db.String(128),nullable=True)
