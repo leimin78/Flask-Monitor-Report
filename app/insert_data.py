@@ -28,7 +28,7 @@ class parseText:
                         cpu_sql = """ insert into sys_info(user_use,sys_use,io_use,idle_use,host_ip,record_time) values ('%s','%s','%s','%s','%s','%s')""" \
                                   % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
-                        cpu_query_sql = """ delete from sys_info where (user_use='%s' and sys_use='%s' and io_use='%s' and idle_use='%s' and host_ip='%s' and record_time='%s')""" \
+                        cpu_query_sql = """ select * from sys_info where (user_use='%s' and sys_use='%s' and io_use='%s' and idle_use='%s' and host_ip='%s' and record_time='%s')""" \
                                         % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
                         sql_list.append(cpu_sql)
                         query_list.append(cpu_query_sql)
@@ -37,7 +37,7 @@ class parseText:
                         mem_sql = """ insert into sys_info(mem_use,mem_free,mem_buffer,mem_total,host_ip,record_time) values ('%s','%s','%s','%s','%s','%s')""" \
                                   % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
-                        mem_qury_sql = """ delete from sys_info where (mem_use='%s' and mem_free='%s' and mem_buffer='%s' and mem_total='%s' and host_ip = '%s' and record_time='%s')""" \
+                        mem_qury_sql = """ select * from sys_info where (mem_use='%s' and mem_free='%s' and mem_buffer='%s' and mem_total='%s' and host_ip = '%s' and record_time='%s')""" \
                                        % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
                         sql_list.append(mem_sql)
                         query_list.append(mem_qury_sql)
@@ -46,7 +46,7 @@ class parseText:
                         disk_sql = """ insert into sys_info(lun_name,lun_use,lun_size,lun_rate,host_ip,record_time) values ('%s','%s','%s','%s','%s','%s')""" \
                                    % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
-                        disk_query_sql = """ delete from sys_info where(lun_name='%s' and lun_use='%s' and lun_size='%s' and lun_rate='%s' and host_ip='%s' and record_time='%s') """ \
+                        disk_query_sql = """ select * from sys_info where(lun_name='%s' and lun_use='%s' and lun_size='%s' and lun_rate='%s' and host_ip='%s' and record_time='%s') """ \
                                          % (lis[4], lis[5], lis[6], lis[7], lis[1], lis[-1].strip('\n'))
 
                         sql_list.append(disk_sql)
@@ -56,7 +56,7 @@ class parseText:
                         base_sql = """ insert into sys_info(system_version,server_uptime,host_ip,record_time) values('%s','%s','%s','%s')""" \
                                    % (lis[4], lis[5], lis[1], lis[-1].strip('\n'))
 
-                        base_query_sql = """delete from sys_info where (system_version='%s' and server_uptime='%s' and host_ip='%s' and record_time='%s')""" \
+                        base_query_sql = """select * from sys_info where (system_version='%s' and server_uptime='%s' and host_ip='%s' and record_time='%s')""" \
                                          % (lis[4], lis[5], lis[1], lis[-1].strip('\n'))
 
                         sql_list.append(base_sql)
@@ -66,7 +66,7 @@ class parseText:
                         run_sql = """ insert into sys_info(run_node_name,host_ip,record_time) values('%s','%s','%s')""" \
                                   % (lis[4], lis[1], lis[-1].strip('\n'))
 
-                        run_query_sql = """delete from sys_info where (run_node_name='%s' and host_ip='%s' and record_time='%s')""" \
+                        run_query_sql = """select * from sys_info where (run_node_name='%s' and host_ip='%s' and record_time='%s')""" \
                                         % (lis[4], lis[1], lis[-1].strip('\n'))
 
                         sql_list.append(run_sql)
@@ -95,7 +95,7 @@ class parseText:
                         report_sql = """ insert into site_report(pk_ds_day,pk_ds_stat_type,ds_num,site_id) values('%s','%s','%s','%s')""" \
                                      % (lis[2], lis[3], lis[4].strip('\n'), lis[0])
 
-                        report_query_sql = """delete from site_report where(pk_ds_day='%s' and pk_ds_stat_type='%s' and ds_num='%s'and site_id='%s')""" \
+                        report_query_sql = """select * from site_report where(pk_ds_day='%s' and pk_ds_stat_type='%s' and ds_num='%s'and site_id='%s')""" \
                                            % (lis[2], lis[3], lis[4].strip('\n'), lis[0])
                         sql_list.append(report_sql)
                         query_list.append(report_query_sql)
@@ -104,7 +104,7 @@ class parseText:
                         alarm_sql = """ insert into site_alarm(ai_node_name,ai_object_name,ai_scene_name,ai_time,ai_last_alarm_time,ai_level,site_id,send_mail) values('%s','%s','%s','%s','%s','%s','%s','0')""" \
                                     % (lis[2], lis[3], lis[4], lis[5], lis[6], lis[7].strip('\n'), lis[0])
 
-                        alarm_query_sql = """delete from site_alarm where(ai_node_name='%s' and ai_object_name='%s' and ai_scene_name='%s' and ai_time='%s' and ai_last_alarm_time='%s' and ai_level='%s' and site_id='%s' )""" \
+                        alarm_query_sql = """select * from site_alarm where(ai_node_name='%s' and ai_object_name='%s' and ai_scene_name='%s' and ai_time='%s' and ai_last_alarm_time='%s' and ai_level='%s' and site_id='%s' )""" \
                                           % (lis[2], lis[3], lis[4], lis[5], lis[6], lis[7].strip('\n'), lis[0])
                         sql_list.append(alarm_sql)
                         query_list.append(alarm_query_sql)
@@ -132,7 +132,7 @@ class parseText:
                     site_server_sql = """ insert into server_info(server_name,server_ip,server_site_id) values('%s','%s','%s')""" \
                                       % (key, site_server[key], site_id)
 
-                    site_server_query_sql = """delete from server_info where (server_name='%s' and server_ip='%s' and server_site_id='%s')""" \
+                    site_server_query_sql = """select * from server_info where (server_name='%s' and server_ip='%s' and server_site_id='%s')""" \
                                             % (key, site_server[key], site_id)
                     sql_list.append(site_server_sql)
                     query_list.append(site_server_query_sql)
@@ -176,32 +176,34 @@ class insertDataMysql:
         self.cur = self.conn.cursor()
 
     def executesql(self, sql_list, query_list):
-        # for index, query_sql in enumerate(query_list):
-        #     # if self.cur.execute(query_sql)!=0:
-        #     #     print(datetime.datetime.now())
-        #     #     print("存在相同数据不写入")
-        #     # else:
+        print("本次需要执行{0}条数据".format(len(query_list)))
+        for index, query_sql in enumerate(query_list):
+            if self.cur.execute(query_sql)!=0:
+                print(datetime.datetime.now())
+                print("{0}条数据相同不写入".format(index))
+            else:
+                try:
+                    print(datetime.datetime.now())
+                    print("正在执行{0}语句：".format(index) + sql_list[index])
+                    self.cur.execute(sql_list[index])
+                    self.conn.commit()
+                except Exception:
+                    continue
+
+        # print("本次需要执行{0}条数据".format(len(query_list)))
+        # for index,sql in enumerate(query_list):
+        #     print("正在执行第{0}语句:{1}".format(index,sql))
+        #     self.cur.execute(sql)
+        #     self.conn.commit()
+        #
+        # print("本次需要执行{0}条数据".format(len(sql_list)))
+        # for index, sql in enumerate(sql_list):
+        #     print("正在执行第{0}语句:{1}".format(index, sql))
         #     try:
-        #         print(datetime.datetime.now())
-        #         print("正在执行语句" + sql_list[index])
-        #         self.cur.execute(query_list[index])
-        #         self.cur.execute(sql_list[index])
+        #         self.cur.execute(sql)
         #         self.conn.commit()
         #     except Exception:
         #         continue
-        #删除数据
-
-        print("本次需要执行{0}条数据".format(len(query_list)))
-        for index,sql in enumerate(query_list):
-            print("正在执行第{0}语句:{1}".format(index,sql))
-            self.cur.execute(sql)
-            self.conn.commit()
-
-        print("本次需要执行{0}条数据".format(len(sql_list)))
-        for index, sql in enumerate(sql_list):
-            print("正在执行第{0}语句:{1}".format(index, sql))
-            self.cur.execute(sql)
-            self.conn.commit()
 
 
     # 析构,关闭链接
