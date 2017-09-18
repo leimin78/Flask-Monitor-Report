@@ -3,7 +3,7 @@ import time
 import requests
 import hashlib
 import xml.etree.ElementTree as ET
-from talk import talk
+from .talk import talk,wechat_site_report,wechat_alarm
 from flask import render_template,redirect,url_for,flash,request,make_response
 from flask_login import login_user,login_required,logout_user
 from . import main
@@ -61,7 +61,6 @@ def siteInfo():
     db = queryDB()
     db.query_db(site_info_sql)
     site_info = db.datas
-
     #获取维护人员信息
     db.query_db(sys_user_sql)
     sys_user_info = db.datas
@@ -288,23 +287,39 @@ def wechat_auth():
     if request.method == 'GET':
         token='hello2017' #微信配置所需的token
         data = request.args
+        print(data)
         signature = data.get('signature','')
+        print("signature:{0}".format(signature))
         timestamp = data.get('timestamp','')
         nonce = data.get('nonce','')
         echostr = data.get('echostr','')
         s = [timestamp,nonce,token]
         s.sort()
         s = ''.join(s)
-        if (hashlib.sha1(s).hexdigest() == signature):
+        print(s)
+        if (hashlib.sha1(s.encode('utf-8')).hexdigest() == signature):
             return make_response(echostr)
-    else:
+    elif request.method == 'POST':
+        db = queryDB()
+        db.query_db(site_info_sql)
+        site_info = db.datas
         rec = request.stream.read()
         print("im posting:{0}".format(rec))
         xml_rec = ET.fromstring(rec)
         tou = xml_rec.find('ToUserName').text
         fromu = xml_rec.find('FromUserName').text
         content = xml_rec.find('Content').text
-        text = talk(tou,content)
+
+        if content == u'日报':
+            text = u"请输入你想要查询的局点ID+R例如:C10R "
+        elif content == u"告警":
+            text = u"请输入你想要查询的局点ID+A例如:C10A "
+        elif content.upper() in [ siteid+'R' for siteid,sitename in site_info]:
+            text = wechat_site_report(content.upper())
+        elif content.upper() in [ siteid+'A' for siteid,sitename in site_info]:
+            text = wechat_alarm(content.upper())
+        else:
+            text = talk(tou,content)
         xml_rep = "<xml>" \
                   "<ToUserName>" \
                   "<![CDATA[%s]]></ToUserName>" \
@@ -317,4 +332,7 @@ def wechat_auth():
         response = make_response(xml_rep % (fromu,tou,str(int(time.time())), text))
         response.content_type='application/xml'
         return response
+
+    else:
+        pass
     return 'Hello weixin!'
