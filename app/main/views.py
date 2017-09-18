@@ -310,14 +310,12 @@ def wechat_auth():
         fromu = xml_rec.find('FromUserName').text
         content = xml_rec.find('Content').text
 
-        if content == u'日报':
-            text = u"请输入你想要查询的局点ID+R例如:C10R "
-        elif content == u"告警":
-            text = u"请输入你想要查询的局点ID+A例如:C10A "
+        if content == u'帮助':
+            text = u"日报查询例如:C10R;告警查询例如:C10A "
         elif content.upper() in [ siteid+'R' for siteid,sitename in site_info]:
-            text = wechat_site_report(content.upper())
+            text = wechat_site_report(content.upper().strip('R'))
         elif content.upper() in [ siteid+'A' for siteid,sitename in site_info]:
-            text = wechat_alarm(content.upper())
+            text = wechat_alarm(content.upper().strip('A'))
         else:
             text = talk(tou,content)
         xml_rep = "<xml>" \
