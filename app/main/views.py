@@ -1,7 +1,10 @@
 import datetime
 import time
 import requests
-from flask import render_template,redirect,url_for,flash,request
+import hashlib
+import xml.etree.ElementTree as ET
+from talk import talk
+from flask import render_template,redirect,url_for,flash,request,make_response
 from flask_login import login_user,login_required,logout_user
 from . import main
 from ..models import *
@@ -277,3 +280,41 @@ def siteAlarm(siteid):
 
     return render_template('site_alarm.html',site_name=site_name,
                            site_alarm_info=site_alarm_info,alarmDict=alarmDict)
+
+
+#增加微信查询功能
+@main.route('/wx',methods=['GET','POST'])
+def wechat_auth():
+    if request.method == 'GET':
+        token='hello2017' #微信配置所需的token
+        data = request.args
+        signature = data.get('signature','')
+        timestamp = data.get('timestamp','')
+        nonce = data.get('nonce','')
+        echostr = data.get('echostr','')
+        s = [timestamp,nonce,token]
+        s.sort()
+        s = ''.join(s)
+        if (hashlib.sha1(s).hexdigest() == signature):
+            return make_response(echostr)
+    else:
+        rec = request.stream.read()
+        print("im posting:{0}".format(rec))
+        xml_rec = ET.fromstring(rec)
+        tou = xml_rec.find('ToUserName').text
+        fromu = xml_rec.find('FromUserName').text
+        content = xml_rec.find('Content').text
+        text = talk(tou,content)
+        xml_rep = "<xml>" \
+                  "<ToUserName>" \
+                  "<![CDATA[%s]]></ToUserName>" \
+                  "<FromUserName><![CDATA[%s]]></FromUserName>" \
+                  "<CreateTime>%s</CreateTime>" \
+                  "<MsgType><![CDATA[text]]></MsgType>" \
+                  "<Content><![CDATA[%s]]></Content>" \
+                  "<FuncFlag>0</FuncFlag>" \
+                  "</xml>"
+        response = make_response(xml_rep % (fromu,tou,str(int(time.time())), text))
+        response.content_type='application/xml'
+        return response
+    return 'Hello weixin!'
