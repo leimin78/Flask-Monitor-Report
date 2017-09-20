@@ -3,7 +3,7 @@ import requests
 import json
 import datetime
 from ..get_server_info_mysql import *
-from ..report_dict import sys_report_dict
+from ..report_dict import sys_report_dict,sys_alarm_level
 from ..alarm_dict import alarmDict
 
 __author__ = 'leimin'
@@ -22,27 +22,27 @@ def wechat_site_report(siteid):
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
     yesterday = yesterday.strftime("%Y%m%d")
 
-    wechat_sub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13001 order by ds_num desc limit 1""" \
+    wechat_sub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13001 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_unsub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13002 order by ds_num desc limit 1""" \
+    wechat_unsub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13002 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_charge_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13003 order by ds_num desc limit 1""" \
+    wechat_charge_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13003 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_total_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13027 order by ds_num desc limit 1""" \
+    wechat_total_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13027 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_totalcall_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13017 order by ds_num desc limit 1""" \
+    wechat_totalcall_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13017 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_ussdtotal_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13009 order by ds_num desc limit 1""" \
+    wechat_ussdtotal_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13009 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_ussdsucess_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13087 order by ds_num desc limit 1""" \
+    wechat_ussdsucess_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13087 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_totalflash_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13018 order by ds_num desc limit 1""" \
+    wechat_totalflash_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13018 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_sucessflash_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13088 order by ds_num desc limit 1""" \
+    wechat_sucessflash_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13088 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_mo_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13007 order by ds_num desc limit 1""" \
+    wechat_mo_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13007 order by id desc limit 1""" \
         .format(yesterday, siteid)
-    wechat_mt_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13008 order by ds_num desc limit 1""" \
+    wechat_mt_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13008 order by id desc limit 1""" \
         .format(yesterday, siteid)
 
     db = queryDB()
@@ -110,8 +110,8 @@ def wechat_alarm(siteid):
     db.query_db(site_alarm_sql.format(site_id=siteid))
     site_alarm_info = db.datas
     wechat_text = ''
-    text = '节点{0} 存在{1}告警：{2},首次告警时间:{3},最近告警时间:{4}\n'
+    text = '节点{0} 存在{1}告警：{2}\n首次告警时间:{3}\n最近告警时间:{4}\n'
     for (id,node,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail) in site_alarm_info:
-        wechat_text+=text.format(node,ai_level,alarmDict[ai_scene_name],ai_time,ai_last_alarm_time)
+        wechat_text+=text.format(node,sys_alarm_level[ai_level],alarmDict[ai_scene_name],ai_time,ai_last_alarm_time)
 
     return wechat_text

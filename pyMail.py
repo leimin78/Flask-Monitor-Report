@@ -19,8 +19,8 @@ class mailSend:
         smtp = smtplib
         smtp = smtplib.SMTP()
         smtp.connect('smtp.mxhichina.com', '25')
-        username = '111'
-        password = '222@WSX'
+        username = 'andy.lei@taiway.net'
+        password = '1qaz@WSX'
         print(username,password)
         smtp.login(username,password)
 
