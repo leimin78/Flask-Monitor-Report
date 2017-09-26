@@ -3,7 +3,7 @@ import time
 import requests
 import hashlib
 import xml.etree.ElementTree as ET
-from .talk import talk,wechat_site_report,wechat_alarm
+from .talk import talk,wechat_site_report,wechat_alarm,wechat_allsite
 from flask import render_template,redirect,url_for,flash,request,make_response
 from flask_login import login_user,login_required,logout_user
 from . import main
@@ -64,7 +64,11 @@ def siteInfo():
     #获取维护人员信息
     db.query_db(sys_user_sql)
     sys_user_info = db.datas
-    return render_template('site_info.html',site_info=site_info,sys_user_info=sys_user_info)
+
+    #获取商用局点信息
+    db.query_db(launch_site_info)
+    launch_info = db.datas
+    return render_template('site_info.html',site_info=site_info,sys_user_info=sys_user_info,launch_info=launch_info)
 
 
 #局点基本信息页面
@@ -316,6 +320,8 @@ def wechat_auth():
             text = wechat_site_report(content.upper().strip('R'))
         elif content.upper() in [ siteid+'A' for siteid,sitename in site_info]:
             text = wechat_alarm(content.upper().strip('A'))
+        elif content.upper() in [ siteid for siteid,sitename in site_info]:
+            text = wechat_allsite(content.upper())
         else:
             text = talk(tou,content)
         xml_rep = "<xml>" \

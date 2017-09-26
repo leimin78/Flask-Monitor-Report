@@ -60,6 +60,26 @@
             </tr>
             {% endfor %}
         </table>
+        <h2 align="center"><font color="FFFFFF">CallShine 商用局点列表</font></h2>
+        <table border="2" align="center" class="imagetable" style="width: 60%">
+            <tr>
+                <th>序号</th>
+                <th>局点编号</th>
+                <th>局点名</th>
+                <th>维护负责人</th>
+                <th>运营负责人</th>
+            </tr>
+            {% for site_id,site_name,site_ops,site_oper in launch_info %}
+            <tr>
+                <td>{{loop.index}}</td>
+                <!--主机名和IP字段-->
+                <td>{{site_id}}</td>
+                <td>{{site_name}}</td>
+                <td>{{site_ops}}</td>
+                <td>{{site_oper}}</td>
+            </tr>
+            {% endfor %}
+        </table>
         <div class="signature" align="center">Powered by <font color="FFFF11F">Yetel @ Python / Operation and maintenance department</font>
         </div>
     </body>

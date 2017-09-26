@@ -50,6 +50,12 @@ site_domain_sql = """select site_url from site_info where site_id='{site_id}'"""
 #获取维护人员相关信息
 sys_user_sql = """select user_cname,user_phone,user_mail,user_site_id from user_info where user_phone is not null and user_name != 'admin' """
 
+
+#获取商用局点信息
+launch_site_info = """select site_id,site_name,site_ops,site_oper from allsite_info order by site_id"""
+launch_site_info_id = """select site_name,site_ops,site_oper from allsite_info where site_id='{site_id}'"""
+
+
 class queryDB:
     # 初始化查询连接
     def __init__(self):

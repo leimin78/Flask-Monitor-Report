@@ -113,5 +113,15 @@ def wechat_alarm(siteid):
     text = '节点{0} 存在{1}告警：{2}\n首次告警时间:{3}\n最近告警时间:{4}\n'
     for (id,node,ai_object_name,ai_level,ai_scene_name,ai_time,ai_last_alarm_time,send_mail) in site_alarm_info:
         wechat_text+=text.format(node,sys_alarm_level[ai_level],alarmDict[ai_scene_name],ai_time,ai_last_alarm_time)
-
     return wechat_text
+
+def wechat_allsite(siteid):
+    db = queryDB()
+    db.query_db(launch_site_info_id)
+    site_info = db.datas
+    wechat_text = ''
+    text = '你查询的局点为:{0}\n运维负责人是:{1}\n运营负责人是:{2}\n'
+    for(site_name,site_ops,site_oper) in site_info:
+        wechat_text+=text.format(site_name,site_ops,site_oper)
+    return wechat_text
+
