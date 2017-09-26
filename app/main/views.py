@@ -307,6 +307,10 @@ def wechat_auth():
         db = queryDB()
         db.query_db(site_info_sql)
         site_info = db.datas
+
+        db.query_db(all_siteid_name_sql)
+        all_site_info = db.datas
+
         rec = request.stream.read()
         print("im posting:{0}".format(rec))
         xml_rec = ET.fromstring(rec)
@@ -320,7 +324,7 @@ def wechat_auth():
             text = wechat_site_report(content.upper().strip('R'))
         elif content.upper() in [ siteid+'A' for siteid,sitename in site_info]:
             text = wechat_alarm(content.upper().strip('A'))
-        elif content.upper() in [ siteid for siteid,sitename in site_info]:
+        elif content.upper() in [ siteid for siteid,sitename in all_site_info]:
             text = wechat_allsite(content.upper())
         else:
             text = talk(tou,content)
