@@ -317,12 +317,11 @@ def wechat_auth():
         tou = xml_rec.find('ToUserName').text
         fromu = xml_rec.find('FromUserName').text
         content = xml_rec.find('Content').text
-
-        if content.upper == u'帮助' or 'HELP':
+        if content.upper() == u'帮助':
             text = u"日报查询例如:C10R\n告警查询例如:C10A\n所有日报查询:ALL\n所有商用局点信息:LIST\n"
-        elif content.upper == 'ALL':
+        elif content.upper() == u'ALL':
             text = wechat_all_site_report()
-        elif content.upper == 'LIST':
+        elif content.upper() == u'LIST':
             text = wechat_all_site_info()
         elif content.upper() in [ siteid+'R' for siteid,sitename in site_info]:
             text = wechat_site_report(content.upper().strip('R'))

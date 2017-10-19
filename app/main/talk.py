@@ -24,6 +24,7 @@ def wechat_site_report(siteid):
 
     wechat_sub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13001 order by id desc limit 1""" \
         .format(yesterday, siteid)
+    print("testsql:"+wechat_sub_sql)
     wechat_unsub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13002 order by id desc limit 1""" \
         .format(yesterday, siteid)
     wechat_charge_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13003 order by id desc limit 1""" \
@@ -78,6 +79,14 @@ def wechat_site_report(siteid):
 
     db.query_db(wechat_mt_sql)
     mt_list = db.datas
+
+    db.query_db(launch_site_name_sql.format(site_id=siteid))
+    site_name_info = db.datas
+    sitename_text = '局点{0} {1}{2}日报表:'
+    site_text = ''
+    for (site_id, site_name) in site_name_info:
+        site_text += sitename_text.format(site_id,site_name,yesterday) + '\n'
+
     text = ''
 
     for (index, value) in sub_list:
@@ -103,7 +112,7 @@ def wechat_site_report(siteid):
     for (index, value) in mt_list:
         text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
 
-    return text
+    return site_text+text
 
 def wechat_alarm(siteid):
     db = queryDB()
@@ -126,20 +135,20 @@ def wechat_allsite(siteid):
     return wechat_text
 
 def wechat_all_site_info():
-    db = queryDB
+    db = queryDB()
     db.query_db(all_launch_list_sql)
     all_site_info = db.datas
     wechat_text = ''
-    text = '你查询的局点为:{0}\n运维负责人是:{1}\n联系电话:{2}\n'
-    for (site_name, site_ops, site_oper) in all_site_info:
-        wechat_text += text.format(site_name, site_ops, site_oper)
+    text = '局点id为:{0}\n局点名:{1}\n运维负责人是:{2}\n联系电话:{3}\n'
+    for (site_id,site_name, site_ops, site_oper) in all_site_info:
+        wechat_text += text.format(site_id,site_name, site_ops, site_oper)+'\n'
     return wechat_text
 
 def wechat_all_site_report():
-    db = queryDB
+    db = queryDB()
     db.query_db(all_monitor_siteid_sql)
     monitor_site = db.datas
     wechat_text = ''
     for site_id in monitor_site:
-        wechat_text +=  wechat_site_report(site_id)
+        wechat_text +=  wechat_site_report(site_id[0]) +'\n'
     return  wechat_text
