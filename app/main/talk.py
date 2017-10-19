@@ -120,8 +120,26 @@ def wechat_allsite(siteid):
     db.query_db(launch_site_info_id)
     site_info = db.datas
     wechat_text = ''
-    text = '你查询的局点为:{0}\n运维负责人是:{1}\n运营负责人是:{2}\n'
+    text = '你查询的局点为:{0}\n运维负责人是:{1}\n联系电话:{2}\n'
     for(site_name,site_ops,site_oper) in site_info:
         wechat_text+=text.format(site_name,site_ops,site_oper)
     return wechat_text
 
+def wechat_all_site_info():
+    db = queryDB
+    db.query_db(all_launch_list_sql)
+    all_site_info = db.datas
+    wechat_text = ''
+    text = '你查询的局点为:{0}\n运维负责人是:{1}\n联系电话:{2}\n'
+    for (site_name, site_ops, site_oper) in all_site_info:
+        wechat_text += text.format(site_name, site_ops, site_oper)
+    return wechat_text
+
+def wechat_all_site_report():
+    db = queryDB
+    db.query_db(all_monitor_siteid_sql)
+    monitor_site = db.datas
+    wechat_text = ''
+    for site_id in monitor_site:
+        wechat_text +=  wechat_site_report(site_id)
+    return  wechat_text

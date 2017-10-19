@@ -53,8 +53,11 @@ sys_user_sql = """select user_cname,user_phone,user_mail,user_site_id from user_
 
 #获取商用局点信息
 launch_site_info = """select site_id,site_name,site_ops,site_oper from allsite_info order by site_id"""
-launch_site_info_id = """select site_name,site_ops,site_oper from allsite_info where site_id='{site_id}'"""
+launch_site_info_id = """select site_name,site_ops,site_ops_number from allsite_info where site_id='{site_id}'"""
 all_siteid_name_sql = """select site_id,site_name from allsite_info order by site_id"""
+all_launch_list_sql = """select site_name,site_ops,site_ops_number from allsite_info order by site_id"""
+all_monitor_siteid_sql = """select site_id from site_info order by site_id"""
+
 
 class queryDB:
     # 初始化查询连接
