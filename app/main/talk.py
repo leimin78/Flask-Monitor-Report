@@ -45,6 +45,19 @@ def wechat_site_report(siteid):
         .format(yesterday, siteid)
     wechat_mt_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13008 order by id desc limit 1""" \
         .format(yesterday, siteid)
+    wechat_seedtotal_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13300 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+    wechat_seednew_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13301 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+    wechat_seedunsub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13302 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+    wechat_seedswitch_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13303 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+    wechat_selfmarket_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13308 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+    wechat_selfmarketswtich_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13225 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
 
     db = queryDB()
     db.query_db(wechat_sub_sql)
@@ -80,6 +93,24 @@ def wechat_site_report(siteid):
     db.query_db(wechat_mt_sql)
     mt_list = db.datas
 
+    db.query_db(wechat_seedtotal_sql)
+    seedtotal_list = db.datas
+
+    db.query_db(wechat_seednew_sql)
+    seednew_list = db.datas
+
+    db.query_db(wechat_seedunsub_sql)
+    seedunsub_list = db.datas
+
+    db.query_db(wechat_seedswitch_sql)
+    seedswitch_list = db.datas
+
+    db.query_db(wechat_selfmarket_sql)
+    selfmarket_list = db.datas
+
+    db.query_db(wechat_selfmarketswtich_sql)
+    selfmarketswitch_list = db.datas
+
     db.query_db(launch_site_name_sql.format(site_id=siteid))
     site_name_info = db.datas
     sitename_text = '局点{0} {1}{2}日报表:'
@@ -110,6 +141,18 @@ def wechat_site_report(siteid):
     for (index, value) in mo_list:
         text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
     for (index, value) in mt_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seedtotal_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seednew_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seedunsub_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seedswitch_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in selfmarket_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in selfmarketswitch_list:
         text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
 
     return site_text+text

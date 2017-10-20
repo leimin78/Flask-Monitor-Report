@@ -8,7 +8,7 @@ SITE_ID='C10'
 DB_USER='cstaitechdb'
 DB_PASS='huawei123'
 
-report_sql=" select pk_ds_day||'|'||pk_ds_stat_type||'|'||ds_num from com_day_stat where pk_ds_stat_type in ('13001','13002','13003','13027','13017','13009','13087','13018','13088','13007','13008')
+report_sql=" select pk_ds_day||'|'||pk_ds_stat_type||'|'||ds_num from com_day_stat where pk_ds_stat_type in ('13001','13002','13003','13027','13017','13009','13087','13018','13088','13007','13008','13300','13301','13302','13303','13308','13225')
 and pk_ds_day >= $SEVEN_DAY_AGO order by pk_ds_day;"
 
 echo $report_sql
