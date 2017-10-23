@@ -319,11 +319,9 @@ def wechat_auth():
         content = xml_rec.find('Content').text
         if content.upper() == u'帮助':
             text = u"日报查询例如:C10R\n告警查询例如:C10A\n所有日报查询:ALL\n所有商用局点信息:LIST\n"
-        elif content.upper() == u'ALL1':
-            text = wechat_all_site_report()[:800]
+        elif content.upper() == u'ALL':
+            text = wechat_all_site_report()
             print("ALL text:{0}".format(text))
-        elif content.upper() == u'ALL2':
-            text = wechat_all_site_report()[800:]
         elif content.upper() == u'LIST':
             text = wechat_all_site_info()
         elif content.upper() in [ siteid+'R' for siteid,sitename in site_info]:

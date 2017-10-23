@@ -169,9 +169,10 @@ def wechat_alarm(siteid):
 
 def wechat_allsite(siteid):
     db = queryDB()
-    db.query_db(launch_site_info_id)
+    db.query_db(launch_site_info_id.format(site_id=siteid))
     site_info = db.datas
     wechat_text = ''
+    print("site_info:{0}".format(site_info))
     text = '你查询的局点为:{0}\n运维负责人是:{1}\n联系电话:{2}\n'
     for(site_name,site_ops,site_oper) in site_info:
         wechat_text+=text.format(site_name,site_ops,site_oper)

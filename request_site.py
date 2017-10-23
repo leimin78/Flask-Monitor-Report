@@ -15,7 +15,7 @@ from app.insert_data import *
 
 DB_FILE = config['development'].DATABASE_URI
 
-site_list = ['C02','C26', 'C18', 'C10', 'C06', 'C05']
+site_list = ['C02','C26', 'C18', 'C10', 'C06', 'C05','C16']
 base_url = 'http://127.0.0.1:5000/site_info/download/'
 basedir = os.path.abspath(os.path.dirname(__file__))
 
