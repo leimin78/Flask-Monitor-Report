@@ -1,6 +1,7 @@
 import datetime
 import time
 import requests
+import re
 import hashlib
 import xml.etree.ElementTree as ET
 from .talk import talk,wechat_site_report,wechat_alarm,wechat_allsite,wechat_all_site_info,wechat_all_site_report_sub,wechat_all_site_report_ope
@@ -16,7 +17,8 @@ from ..insert_data import *
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-
+rule_sub = re.compile(r'sub\d{8}')
+rule_ope = re.compile(r'ope\d{8}')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -323,6 +325,12 @@ def wechat_auth():
             text = wechat_all_site_report_sub()
         elif content.upper() == u'OPE':
             text = wechat_all_site_report_ope()
+        elif rule_sub.search(content.upper()):
+            query_time = rule_sub.search(content.upper()).group()[3:]
+            wechat_all_site_report_sub(query_time)
+        elif rule_ope.search(content.upper()):
+            query_time = rule_ope.search(content.upper()).group()[3:]
+            wechat_all_site_report_ope(query_time)
         elif content.upper() == u'LIST':
             text = wechat_all_site_info()
         elif content.upper() in [ siteid+'R' for siteid,sitename in site_info]:
