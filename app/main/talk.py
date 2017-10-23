@@ -188,11 +188,195 @@ def wechat_all_site_info():
         wechat_text += text.format(site_id,site_name, site_ops, site_oper)+'\n'
     return wechat_text
 
-def wechat_all_site_report():
+
+def wechat_site_report_sub(siteid):
+
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    yesterday = yesterday.strftime("%Y%m%d")
+
+    wechat_sub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13001 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_unsub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13002 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_charge_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13003 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_total_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13027 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_seedtotal_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13300 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_seednew_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13301 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_seedunsub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13302 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_seedswitch_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13303 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    db = queryDB()
+    db.query_db(wechat_sub_sql)
+    sub_list = db.datas
+
+    db.query_db(wechat_unsub_sql)
+    ubsub_list = db.datas
+
+    db.query_db(wechat_charge_sql)
+    charge_list = db.datas
+
+    db.query_db(wechat_total_sql)
+    total_list = db.datas
+
+    db.query_db(wechat_seedtotal_sql)
+    seedtotal_list = db.datas
+
+    db.query_db(wechat_seednew_sql)
+    seednew_list = db.datas
+
+    db.query_db(wechat_seedunsub_sql)
+    seedunsub_list = db.datas
+
+    db.query_db(wechat_seedswitch_sql)
+    seedswitch_list = db.datas
+
+
+    db.query_db(launch_site_name_sql.format(site_id=siteid))
+    site_name_info = db.datas
+    sitename_text = '局点{0}-{1}:{2}日报表:'
+    site_text = ''
+    for (site_id, site_name) in site_name_info:
+        site_text += sitename_text.format(site_id, site_name, yesterday) + '\n'
+
+    text = ''
+
+    for (index, value) in sub_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in ubsub_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in charge_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in total_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seedtotal_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seednew_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seedunsub_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in seedswitch_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+
+    return site_text + text
+
+def wechat_site_report_ope(siteid):
+
+    yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
+    yesterday = yesterday.strftime("%Y%m%d")
+
+    wechat_totalcall_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13017 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_ussdtotal_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13009 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_ussdsucess_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13087 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_totalflash_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13018 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_sucessflash_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13088 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_mo_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13007 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_mt_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13008 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_selfmarket_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13308 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    wechat_selfmarketswtich_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13225 order by id desc limit 1""" \
+        .format(yesterday, siteid)
+
+    db = queryDB()
+
+    db.query_db(wechat_totalcall_sql)
+    totalcall_list = db.datas
+
+    db.query_db(wechat_ussdtotal_sql)
+    totalussd_list = db.datas
+
+    db.query_db(wechat_ussdsucess_sql)
+    sucessussd_list = db.datas
+
+    db.query_db(wechat_totalflash_sql)
+    totalflash_list = db.datas
+
+    db.query_db(wechat_sucessflash_sql)
+    sucessflash_list = db.datas
+
+    db.query_db(wechat_mo_sql)
+    mo_list = db.datas
+
+    db.query_db(wechat_mt_sql)
+    mt_list = db.datas
+
+    db.query_db(wechat_selfmarket_sql)
+    selfmarket_list = db.datas
+
+    db.query_db(wechat_selfmarketswtich_sql)
+    selfmarketswitch_list = db.datas
+
+    db.query_db(launch_site_name_sql.format(site_id=siteid))
+    site_name_info = db.datas
+    sitename_text = '局点{0} {1}{2}日报表:'
+    site_text = ''
+    for (site_id, site_name) in site_name_info:
+        site_text += sitename_text.format(site_id, site_name, yesterday) + '\n'
+
+    text = ''
+
+    for (index, value) in totalcall_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in totalussd_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in sucessussd_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in totalflash_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in sucessflash_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in mo_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in mt_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in selfmarket_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+    for (index, value) in selfmarketswitch_list:
+        text += ''.join(sys_report_dict[index]) + ':' + value + '\n'
+
+    return site_text + text
+
+def wechat_all_site_report_sub():
     db = queryDB()
     db.query_db(all_monitor_siteid_sql)
     monitor_site = db.datas
     wechat_text = ''
     for site_id in monitor_site:
-        wechat_text +=  wechat_site_report(site_id[0]) +'\n'
+        wechat_text +=  wechat_site_report_sub(site_id[0]) +'\n'
+    return  wechat_text
+
+def wechat_all_site_report_ope():
+    db = queryDB()
+    db.query_db(all_monitor_siteid_sql)
+    monitor_site = db.datas
+    wechat_text = ''
+    for site_id in monitor_site:
+        wechat_text +=  wechat_site_report_ope(site_id[0]) +'\n'
     return  wechat_text
