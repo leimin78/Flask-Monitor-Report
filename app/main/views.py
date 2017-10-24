@@ -17,8 +17,8 @@ from ..insert_data import *
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-rule_sub = re.compile(r'sub\d{8}')
-rule_ope = re.compile(r'ope\d{8}')
+rule_sub = re.compile(r'SUB\d{8}')
+rule_ope = re.compile(r'OPE\d{8}')
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -327,10 +327,10 @@ def wechat_auth():
             text = wechat_all_site_report_ope()
         elif rule_sub.search(content.upper()):
             query_time = rule_sub.search(content.upper()).group()[3:]
-            wechat_all_site_report_sub(query_time)
+            text = wechat_all_site_report_sub(query_time)
         elif rule_ope.search(content.upper()):
             query_time = rule_ope.search(content.upper()).group()[3:]
-            wechat_all_site_report_ope(query_time)
+            text = wechat_all_site_report_ope(query_time)
         elif content.upper() == u'LIST':
             text = wechat_all_site_info()
         elif content.upper() in [ siteid+'R' for siteid,sitename in site_info]:

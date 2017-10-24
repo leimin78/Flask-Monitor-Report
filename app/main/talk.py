@@ -194,7 +194,7 @@ def wechat_site_report_sub(siteid,query_time):
     yesterday = datetime.datetime.now() - datetime.timedelta(days=1)
     yesterday = yesterday.strftime("%Y%m%d")
 
-    if query_time == -1:
+    if query_time == '-1':
         query_time = yesterday
 
     wechat_sub_sql = """ select pk_ds_stat_type,ds_num from site_report where pk_ds_day='{0}' and site_id='{1}' and  pk_ds_stat_type=13001 order by id desc limit 1""" \
