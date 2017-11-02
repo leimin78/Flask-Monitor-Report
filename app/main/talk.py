@@ -252,7 +252,7 @@ def wechat_site_report_sub(siteid,query_time):
     sitename_text = '局点{0}-{1}:{2}日开户报表:'
     site_text = ''
     for (site_id, site_name) in site_name_info:
-        site_text += sitename_text.format(site_id, site_name, yesterday) + '\n'
+        site_text += sitename_text.format(site_id, site_name, query_time) + '\n'
 
     text = ''
 
@@ -343,7 +343,7 @@ def wechat_site_report_ope(siteid,query_time):
     sitename_text = '局点{0}-{1}{2}日:推送报表:'
     site_text = ''
     for (site_id, site_name) in site_name_info:
-        site_text += sitename_text.format(site_id, site_name, yesterday) + '\n'
+        site_text += sitename_text.format(site_id, site_name, query_time) + '\n'
 
     text = ''
 
