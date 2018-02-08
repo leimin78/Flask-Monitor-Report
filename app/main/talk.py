@@ -368,7 +368,9 @@ def wechat_site_report_ope(siteid,query_time):
 
     return site_text + text
 
-def wechat_all_site_report_sub(*args):
+
+
+def wechat_all_site_report_suba(*args):
 
     try:
         query_time = args[0]
@@ -377,7 +379,22 @@ def wechat_all_site_report_sub(*args):
 
     db = queryDB()
     db.query_db(all_monitor_siteid_sql)
-    monitor_site = db.datas
+    monitor_site = db.datas[:3]
+    wechat_text = ''
+    for site_id in monitor_site:
+        wechat_text +=  wechat_site_report_sub(site_id[0],query_time) +'\n'
+    return  wechat_text
+
+def wechat_all_site_report_subb(*args):
+
+    try:
+        query_time = args[0]
+    except IndexError:
+        query_time = '-1'
+
+    db = queryDB()
+    db.query_db(all_monitor_siteid_sql)
+    monitor_site = db.datas[3:]
     wechat_text = ''
     for site_id in monitor_site:
         wechat_text +=  wechat_site_report_sub(site_id[0],query_time) +'\n'

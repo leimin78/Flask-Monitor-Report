@@ -4,7 +4,7 @@ import requests
 import re
 import hashlib
 import xml.etree.ElementTree as ET
-from .talk import talk,wechat_site_report,wechat_alarm,wechat_allsite,wechat_all_site_info,wechat_all_site_report_sub,wechat_all_site_report_ope
+from .talk import talk,wechat_site_report,wechat_alarm,wechat_allsite,wechat_all_site_info,wechat_all_site_report_suba,wechat_all_site_report_subb,wechat_all_site_report_ope
 from flask import render_template,redirect,url_for,flash,request,make_response
 from flask_login import login_user,login_required,logout_user
 from . import main
@@ -321,8 +321,10 @@ def wechat_auth():
         content = xml_rec.find('Content').text
         if content.upper() == u'帮助':
             text = u"日报查询例如:C10R\n告警查询例如:C10A\n所有日报查询:ALL\n所有商用局点信息:LIST\n"
-        elif content.upper() == u'SUB':
-            text = wechat_all_site_report_sub()
+        elif content.upper() == u'SUBA':
+            text = wechat_all_site_report_suba()
+        elif content.upper() == u'SUBB':
+            text = wechat_all_site_report_subb()
         elif content.upper() == u'OPE':
             text = wechat_all_site_report_ope()
         elif rule_sub.search(content.upper()):
